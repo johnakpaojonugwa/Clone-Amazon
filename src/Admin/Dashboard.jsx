@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
+import { MdDashboard, MdCategory, MdOutlineProductionQuantityLimits, MdCreateNewFolder } from "react-icons/md";
+import { FaUserGroup, FaRegUser  } from "react-icons/fa6";
+import { IoIosCreate, IoIosArrowDown } from "react-icons/io";
+import { BsCart2 } from "react-icons/bs";
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -10,6 +15,7 @@ function Dashboard() {
     const [totalCartProducts, setTotalCartProducts] = useState(0);
     const [products, setProducts] = useState([]);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [load, setLoad] = useState(true);
 
     useEffect(() => {
         const merchantData = JSON.parse(localStorage.getItem("MerchantUser"));
@@ -24,8 +30,9 @@ function Dashboard() {
         const fetchTotalProducts = async () => {
             try {
                 const res = await api.get(`/products?merchant_id=${merchantData.id}`);
-                const data = res.data;
+                const data = await res.data;
                 const count = data.total ?? (Array.isArray(data) ? data.length : 0);
+                setLoad(false);
                 setTotalProducts(count);
             } catch (err) {
                 console.error("Error fetching total products:", err);
@@ -35,6 +42,7 @@ function Dashboard() {
         const fetchTotalUsers = async () => {
             try {
                 const res = await api.get(`/users`);
+                setLoad(false);
                 setTotalUsers(res.data.length);
             } catch (err) {
                 console.error("Error fetching total users:", err);
@@ -44,7 +52,7 @@ function Dashboard() {
         const fetchTotalCartProducts = async () => {
             const user_id = userData?.id;
             if (!user_id) {
-                console.log("No user logged in");
+                // console.log("No user logged in");
                 setTotalCartProducts(0);
                 return;
             }
@@ -53,6 +61,7 @@ function Dashboard() {
                 const res = await api.get(`/carts?user_id=${user_id}`);
                 const cartItems = res.data.data || res.data || [];
                 const totalQuantity = cartItems.reduce((sum, item) => sum + (item.quantity || 0), 0);
+                setLoad(false);
                 setTotalCartProducts(totalQuantity);
             } catch (err) {
                 console.error("Error fetching cart count:", err);
@@ -64,6 +73,7 @@ function Dashboard() {
             try {
                 const res = await api.get(`/products?merchant_id=${merchantData.id}`);
                 const data = Array.isArray(res.data) ? res.data : res.data.data || [];
+                setLoad(false);
                 setProducts(data);
             } catch (err) {
                 console.error("Error fetching products:", err);
@@ -82,6 +92,14 @@ function Dashboard() {
         navigate("/login");
     };
 
+    if (load) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader />
+      </div>
+    );
+  }
+
     return (
         <div className="bg-gray-100 flex h-screen">
             {/* Sidebar */}
@@ -90,13 +108,13 @@ function Dashboard() {
                     Admin.
                 </div>
                 <nav className="flex-1 p-4 space-y-3">
-                    <Link to="/dashboard" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900">📊 Dashboard</Link> 
-                    <Link to="/dashboard" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900">🈯 Category</Link> 
-                    <Link to="/products" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900">🛒 Products</Link> 
-                    <Link to="/users" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900">👥 Users</Link> 
-                    <Link to="/createproduct" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900">➕ Create Product</Link> 
-                    <Link to="/createuser" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900">➕ Create User</Link> 
-                    <Link to="/cart" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900">🛒 Cart</Link> 
+                    <Link to="/dashboard" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><MdDashboard />Dashboard</Link> 
+                    <Link to="/category" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><MdCategory /> Category</Link> 
+                    <Link to="/products" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><MdOutlineProductionQuantityLimits /> Products</Link> 
+                    <Link to="/users" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><FaUserGroup /> Users</Link> 
+                    <Link to="/createproduct" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><IoIosCreate /> Create Product</Link> 
+                    <Link to="/createuser" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><MdCreateNewFolder /> Create User</Link> 
+                    <Link to="/cart" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><BsCart2 /> Cart</Link> 
                 </nav>
                 <div className="p-4 border-t border-gray-700 text-sm flex flex-col gap-2">
                     <button onClick={handleLogout} className="w-full py-2 rounded bg-red-600 text-white hover:bg-red-600">
@@ -117,29 +135,27 @@ function Dashboard() {
                             onClick={() => setDropdownOpen(!dropdownOpen)}
                         >
                             <span className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 font-bold">
-                                👤
+                                <FaRegUser />
                             </span>
                             <h4 className="font-light text-sm">
-                                Admin: <span className="text-gray-700">{MerchantUser?.name}</span>
+                                Admin: <span className="text-gray-700 font-semibold">{MerchantUser?.first_name}</span>
                             </h4>
-                            <img
-                                src="/images/down-arrow.png"
-                                alt="dropdown"
-                                className="w-4 h-4"
-                            />
+                            <span>
+                                <IoIosArrowDown />
+                            </span>
                         </button>
 
                         {dropdownOpen && (
                             <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg z-50">
                                 <div className="px-4 py-4 text-sm text-gray-700 space-y-4 shadow-md">
                                     <p className="font-bold text-sm">
-                                        Name: <span className="font-light">{MerchantUser?.name}</span>
+                                        Name: <span className="font-light">{MerchantUser?.first_name}</span>
                                     </p>
                                     <p className="font-bold text-sm">
                                         Email: <span className="font-light">{MerchantUser?.email}</span>
                                     </p>
                                     <p className="font-bold text-sm">
-                                        Store Name: <span className="font-light">{merchantData?.store_name}</span>
+                                        Store Name: <span className="font-light">{MerchantUser?.store_name}</span>
                                     </p>
                                 </div>
                                 <div className="border-t">

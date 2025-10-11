@@ -9,6 +9,7 @@ import CreateUser from "./Admin/CreateUser";
 import CreateProduct from "./Admin/CreateProduct";
 import Category from "./Admin/Category";
 import Products from "./Admin/Products";
+import Cart from "./Admin/Cart";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/createproduct" element={<CreateProduct />} />
         <Route path="/category" element={<Category />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </BrowserRouter>
   )
