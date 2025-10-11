@@ -10,6 +10,7 @@ import CreateProduct from "./Admin/CreateProduct";
 import Category from "./Admin/Category";
 import Products from "./Admin/Products";
 import Cart from "./Admin/Cart";
+import UserLogin from "./Admin/UserLogin";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/users" element={<Users />} />
         <Route path="/createuser" element={<CreateUser />} />
+        <Route path="/userlogin" element={<UserLogin />} />
         <Route path="/createproduct" element={<CreateProduct />} />
         <Route path="/category" element={<Category />} />
         <Route path="/products" element={<Products />} />

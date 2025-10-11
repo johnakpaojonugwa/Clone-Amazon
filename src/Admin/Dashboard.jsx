@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import api from "../api";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
-import { MdDashboard, MdCategory, MdOutlineProductionQuantityLimits, MdCreateNewFolder } from "react-icons/md";
-import { FaUserGroup, FaRegUser  } from "react-icons/fa6";
+import { MdCategory, MdOutlineProductionQuantityLimits, MdCreateNewFolder, MdAdminPanelSettings } from "react-icons/md";
+import { RiDashboardHorizontalFill } from "react-icons/ri";
+import { FaUserGroup, FaRegUser } from "react-icons/fa6";
 import { IoIosCreate, IoIosArrowDown } from "react-icons/io";
 import { BsCart2 } from "react-icons/bs";
+import { PiSignInBold } from "react-icons/pi";
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -93,33 +95,36 @@ function Dashboard() {
     };
 
     if (load) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader />
-      </div>
-    );
-  }
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <Loader />
+            </div>
+        );
+    }
 
     return (
         <div className="bg-gray-100 flex h-screen">
             {/* Sidebar */}
-            <section className="w-64 bg-blue-950 text-[#dedede] flex flex-col sticky top-10 self-start h-screen">
-                <div className="p-6 text-2xl font-bold border-b border-gray-700 flex items-center justify-between">
-                    Admin.
+            <section className="w-64 bg-teal-800 text-gray-300 flex flex-col sticky top-10 self-start h-screen">
+                <div className="p-6 text-2xl font-bold border-b border-teal-700 flex items-center justify-between">
+                    Admin. <MdAdminPanelSettings className="text-3xl" />
                 </div>
-                <nav className="flex-1 p-4 space-y-3">
-                    <Link to="/dashboard" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><MdDashboard />Dashboard</Link> 
-                    <Link to="/category" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><MdCategory /> Category</Link> 
-                    <Link to="/products" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><MdOutlineProductionQuantityLimits /> Products</Link> 
-                    <Link to="/users" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><FaUserGroup /> Users</Link> 
-                    <Link to="/createproduct" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><IoIosCreate /> Create Product</Link> 
-                    <Link to="/createuser" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><MdCreateNewFolder /> Create User</Link> 
-                    <Link to="/cart" className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-blue-900"><BsCart2 /> Cart</Link> 
+                <nav className="flex-1 space-y-3">
+                    <Link to="/dashboard" className="flex items-center gap-3 py-2 px-3 hover:bg-teal-900"><RiDashboardHorizontalFill className="text-3xl" />Dashboard</Link>
+                    <Link to="/category" className="flex items-center gap-3 py-2 px-3 hover:bg-teal-900"><MdCategory className="text-3xl" /> Category</Link>
+                    <Link to="/products" className="flex items-center gap-3 py-2 px-3 hover:bg-teal-900"><MdOutlineProductionQuantityLimits className="text-3xl" /> Products</Link>
+                    <Link to="/users" className="flex items-center gap-3 py-2 px-3 hover:bg-teal-900"><FaUserGroup className="text-3xl" /> Users</Link>
+                    <Link to="/createproduct" className="flex items-center gap-3 py-2 px-3 hover:bg-teal-900"><IoIosCreate className="text-3xl" /> Create Product</Link>
+                    <Link to="/createuser" className="flex items-center gap-3 py-2 px-3 hover:bg-teal-900"><MdCreateNewFolder className="text-3xl" /> Create User</Link>
+                    <Link to="/cart" className="flex items-center gap-3 py-2 px-3 hover:bg-teal-900"><BsCart2 className="text-3xl" /> Cart</Link>
                 </nav>
-                <div className="p-4 border-t border-gray-700 text-sm flex flex-col gap-2">
-                    <button onClick={handleLogout} className="w-full py-2 rounded bg-red-600 text-white hover:bg-red-600">
-                        Logout
+                <div className="flex items-center gap-3 py-2 my-50 cursor-pointer px-3 hover:bg-teal-900 mt-auto">
+                    <button onClick={handleLogout} className="flex items-center gap-2">
+                        <PiSignInBold className="text-3xl" />
+                        Sign out
                     </button>
+                </div>
+                <div className="p-4 border-t border-teal-700 text-sm flex flex-col gap-2">
                     <p className="text-xs text-gray-400">&copy; 2025 Rework Admin</p>
                 </div>
             </section>
@@ -134,12 +139,12 @@ function Dashboard() {
                             className="flex items-center gap-2"
                             onClick={() => setDropdownOpen(!dropdownOpen)}
                         >
+                            <h4 className="font-light text-sm">
+                                Hi, <span className="text-gray-700 font-semibold">{MerchantUser?.first_name}</span>
+                            </h4>
                             <span className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 font-bold">
                                 <FaRegUser />
                             </span>
-                            <h4 className="font-light text-sm">
-                                Admin: <span className="text-gray-700 font-semibold">{MerchantUser?.first_name}</span>
-                            </h4>
                             <span>
                                 <IoIosArrowDown />
                             </span>
@@ -193,9 +198,12 @@ function Dashboard() {
                         Products
                     </h2>
                 </header>
-                <div className="overflow-x-auto px-6 sticky md:top-10 self-start">
+                {load ? (
+                    <Loader message="Loading products..." />
+                ) : products.length ? (
+                    <div className="overflow-x-auto px-6 sticky md:top-10 self-start">
                     <table className="min-w-full border-collapse border border-gray-200 text-left">
-                        <thead className="bg-blue-950 text-white">
+                        <thead className="bg-teal-800 text-white">
                             <tr>
                                 <th className="border border-gray-200 p-3">Title</th>
                                 <th className="border border-gray-200 p-3">Image</th>
@@ -221,6 +229,10 @@ function Dashboard() {
                         </tbody>
                     </table>
                 </div>
+                ) : (
+                    <p className="text-center text-gray-500">No products found</p>
+                )}
+                
             </div>
         </div>
     );
