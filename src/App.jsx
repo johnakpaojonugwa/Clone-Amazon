@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
 import NotFound from "./pages/notfound/NotFound";
 import Register from "./Admin/auth/Register";
 import Login from "./Admin/auth/Login";
@@ -19,7 +20,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/" element={<Login />} />
       <Route path="/dashboard" element={<Layout />}>
-        <Route index element={<Dashboard />} />
+        <Route path="" element={<Dashboard />} />
         <Route path="users" element={<Users />} />
         <Route path="createuser" element={<CreateUser />} />
         <Route path="userlogin" element={<UserLogin />} />
