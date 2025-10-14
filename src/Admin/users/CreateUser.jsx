@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../api";
-import Loader from "../components/Loader";
+import api from "../../api";
+import Loader from "../../components/Loader";
 import { MdCategory, MdOutlineProductionQuantityLimits, MdCreateNewFolder, MdAdminPanelSettings } from "react-icons/md";
 import { RiDashboardHorizontalFill } from "react-icons/ri";
 import { FaUserGroup, FaRegUser } from "react-icons/fa6";
