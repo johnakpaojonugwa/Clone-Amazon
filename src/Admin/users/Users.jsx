@@ -42,55 +42,57 @@ function Users() {
 
     return (
         <div className="bg-gray-100 flex h-screen">
-            <div>Users</div>
             {/* Main Content */}
             <div className="flex-1 overflow-y-auto">
-                <div className="p-6 bg-gray-100 min-h-screen">
-                    <h1 className="text-2xl font-semibold mb-6 text-center">Users</h1>
-                    <div>
-                        <div className="overflow-x-auto bg-white shadow-md rounded-xl">
-                            <table className="min-w-full border-collapse border border-gray-200 text-left">
-                                <thead className="bg-[#022C22] text-white">
-                                    <tr>
-                                        <th className=" border-gray-200 p-3">S/N</th>
-                                        <th className=" border-gray-200 p-3">First Name</th>
-                                        <th className=" border-gray-200 p-3">Last Name</th>
-                                        <th className=" border-gray-200 p-3">Email</th>
-                                        <th className=" border-gray-200 p-3">Phone</th>
-                                        <th className=" border-gray-200 p-3">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {users.map((user, i) => (
-                                        <tr key={user._id}
-                                            className="odd:bg-white even:bg-gray-50">
-                                            <td className=" border-gray-200 p-4 text-gray-500">{i + 1}</td>
-                                            <td className=" border-gray-200 p-4 text-gray-500">{user.first_name}</td>
-                                            <td className=" border-gray-200 p-4 text-gray-500">{user.last_name}</td>
-                                            <td className=" border-gray-200 p-4 text-gray-500">{user.email}</td>
-                                            <td className=" border-gray-200 p-4 text-gray-500">{user.phone}</td>
-                                            <td className=" border-gray-200 p-4 space-x-8">
-                                                <button
-                                                    // onClick={() => handleEdit(user)}
-                                                    className="text-blue-600 hover:underline cursor-pointer"
-                                                >
-                                                    <TbUserEdit />
-                                                </button>
-                                                <button
-                                                    // onClick={() => handleDelete(user._id)}
-                                                    className="text-red-600 hover:underline cursor-pointer"
-                                                >
-                                                    <TiUserDelete />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                {/* Header */}
+                <header className="flex justify-between items-center p-5 bg-white shadow">
+                    <h1 className="text-xl font-semibold text-gray-800">Users</h1>
+                </header>
+                <div className="min-h-dvh bg-[#f9f9f9] mt-10">
+                    <div className="overflow-x-auto bg-white shadow-md rounded-xl">
+                        <div className="text-center text-xl font-semibold text-gray-800 py-7">
+                            <h1>Users Table</h1>
                         </div>
+                        <table className="min-w-full border-collapse border border-gray-200 text-left">
+                            <thead className="bg-[#022C22] text-white">
+                                <tr>
+                                    <th className=" border-gray-200 p-3">S/N</th>
+                                    <th className=" border-gray-200 p-3">First Name</th>
+                                    <th className=" border-gray-200 p-3">Last Name</th>
+                                    <th className=" border-gray-200 p-3">Email</th>
+                                    <th className=" border-gray-200 p-3">Phone</th>
+                                    <th className=" border-gray-200 p-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {users.map((user, i) => (
+                                    <tr key={user._id}
+                                        className="odd:bg-white even:bg-gray-50">
+                                        <td className=" border-gray-200 p-4 text-gray-500">{i + 1}</td>
+                                        <td className=" border-gray-200 p-4 text-gray-500">{user.first_name}</td>
+                                        <td className=" border-gray-200 p-4 text-gray-500">{user.last_name}</td>
+                                        <td className=" border-gray-200 p-4 text-gray-500">{user.email}</td>
+                                        <td className=" border-gray-200 p-4 text-gray-500">{user.phone}</td>
+                                        <td className=" border-gray-200 p-4 space-x-8">
+                                            <button
+                                                // onClick={() => handleEdit(user)}
+                                                className="text-blue-600 hover:underline cursor-pointer"
+                                            >
+                                                <TbUserEdit />
+                                            </button>
+                                            <button
+                                                // onClick={() => handleDelete(user._id)}
+                                                className="text-red-600 hover:underline cursor-pointer"
+                                            >
+                                                <TiUserDelete />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-
 
             </div>
         </div>

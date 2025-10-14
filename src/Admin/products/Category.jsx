@@ -63,6 +63,10 @@ function Category() {
         <div className="bg-gray-100 flex h-screen">
             {/* Main Content */}
             <div className="flex-1 overflow-y-auto">
+                {/* Header */}
+                <header className="flex justify-between items-center p-5 bg-white shadow">
+                    <h1 className="text-xl font-semibold text-gray-800">Category</h1>
+                </header>
 
                 <div className="account min-h-dvh bg-[#f9f9f9]">
                     <div className="account_header text-center py-7">
