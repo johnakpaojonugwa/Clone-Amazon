@@ -16,7 +16,7 @@ export const AppProvider = ({ children }) => {
         const merchantUser = sessionStorage.getItem('merchantUser')
 
         setTheme(savedTheme);
-        if (merchantUser) setUser(JSON.parse(merchantUser))
+        if (merchantUser) setMerchantUser(JSON.parse(merchantUser))
 
         document.documentElement.classList.remove('light', "dark");
         document.documentElement.classList.add(savedTheme);
