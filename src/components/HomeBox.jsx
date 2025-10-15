@@ -9,7 +9,7 @@ function HomeBox({ title, items, linkText }) {
             <img
               src={item.img}
               alt={item.caption}
-              className="w-full h-28 object-cover"
+              className="w-full h-28 object-contain"
               loading="lazy"
             />
             <p className="mt-1 text-xs text-gray-700">{item.caption}</p>
