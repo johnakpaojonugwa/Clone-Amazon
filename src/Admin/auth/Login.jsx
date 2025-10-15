@@ -36,7 +36,7 @@ const Login = () => {
                 setMerchantUser(userData);
                 sessionStorage.setItem("merchantUser", JSON.stringify(userData));
 
-                toast.success(`Welcome back, ${userData.name || "user"}!`);
+                toast.success(`Welcome back, ${userData.name || "merchant"}!`);
                 setTimeout(() => {
                     navigate("/dashboard");
                     setLoading(false);
