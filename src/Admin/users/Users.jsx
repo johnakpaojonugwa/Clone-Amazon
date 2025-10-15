@@ -75,7 +75,7 @@ const Users = () => {
       setSelectedUser(null);
     } catch (error) {
       toast.error("Error updating user");
-      console.error(error);
+      console.log(error);
     } finally {
       setLoading(false);
     }
