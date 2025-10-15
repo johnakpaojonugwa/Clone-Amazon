@@ -32,7 +32,7 @@ const MainFooter = () => {
           <div key={i}>
             <h4 className="font-semibold text-white">{item}</h4>
             <p className="text-gray-400 text-[11px] mt-1">
-              Lorem ipsum dolor sit amet consectetur.
+              Stream Millions of Music
             </p>
           </div>
         ))}

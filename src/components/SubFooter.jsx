@@ -2,6 +2,13 @@ import React from "react";
 
 const SubFooter = () => {
   return (
+    <div>
+             <div
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="Backtotop bg-[#586370] text-gray-200 font-[13px] text-center py-[15px] cursor-pointer hover:bg-gray-600">
+    Back To Top
+  </div>
+
     <footer className="bg-[#232F3E] text-gray-200 py-10">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
         <div>
@@ -66,6 +73,7 @@ const SubFooter = () => {
         </div>
       </div>
     </footer>
+    </div>
   );
 };
 

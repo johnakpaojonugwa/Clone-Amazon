@@ -5,7 +5,7 @@ const Nav = () => (
   <nav className="bg-[#131921] text-white p-2 text-sm">
     <div className="flex items-center justify-between max-w-7xl mx-auto">
       <div className="flex items-center gap-4">
-        <span className="font-bold text-lg text-white">amazon</span>
+        <span className="font-bold text-lg text-white"><Link to={"/"}>Amazon</Link></span>
         <span className="hidden md:block text-xs">Deliver to Nigeria</span>
       </div>
 
