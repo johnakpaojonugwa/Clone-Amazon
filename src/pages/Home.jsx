@@ -9,7 +9,7 @@ import ProductRow from "../components/ProductRow"
 
 function Home() {
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 min-h-screen w-[80%] mx-auto">
       <div className="relative">
         <div className="w-full bg-gradient-to-r from-purple-300 via-pink-300 to-purple-200">
           <BannerCarousel />
