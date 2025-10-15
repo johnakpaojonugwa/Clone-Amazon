@@ -38,7 +38,7 @@ function Layout() {
     };
 
     const bgColor = theme === "dark" ? "bg-gray-900" : "bg-gray-50";
-    const textColor = theme === "dark" ? "text-gray-100" : "text-gray-900";
+    const textColor = theme === "dark" ? "text-gray-900" : "text-gray-900";
 
     return (
         <div className={`flex h-screen ${bgColor} ${textColor} transition-all duration-300`}>
@@ -161,7 +161,7 @@ function Layout() {
                 {/* Content Area */}
                 <main
                     className={`flex-1 p-6 overflow-y-auto transition-all duration-300 ${
-                        theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-gray-100 text-gray-900"
+                        theme === "dark" ? "bg-gray-900 text-teal-600" : "bg-gray-100 text-teal-600"
                     }`}
                 >
                     {/* Render all page content (including your summary cards) */}

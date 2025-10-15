@@ -79,10 +79,6 @@ function CreateUser() {
 
             {/* Main Content */}
             <div className=" flex-1 overflow-y-auto">
-                {/* Header */}
-                <header className="flex justify-between items-center p-5 bg-white shadow">
-                    <h1 className="text-xl font-semibold text-gray-800">Create User</h1>
-                </header>
 
                 <div className="account min-h-dvh bg-[#f9f9f9]">
                     <div className="account_header text-center py-7">
@@ -115,7 +111,7 @@ function CreateUser() {
                             {err == true && password == "" ? <span className="text-red-500 text-xs">Password Required</span> : null}
                         </div>
                         <div className="form_btn">
-                            <button className="mt-4 text-center text-sm text-gray-700 bg-blue-950 text-white py-2 px-6 cursor-pointer w-50">Create User</button>
+                            <button className="mt-4 text-center text-sm text-gray-700 bg-teal-900 hover:bg-teal-600 text-white py-2 px-6 cursor-pointer w-50">Create User</button>
                         </div>
                     </form>
                 </div>

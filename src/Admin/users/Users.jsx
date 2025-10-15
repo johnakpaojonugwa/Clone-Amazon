@@ -104,6 +104,8 @@ import { useApp } from "../../context/AppContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { FaUserEdit } from "react-icons/fa";
+import { MdDeleteSweep } from "react-icons/md";
 
 const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -229,14 +231,14 @@ const Users = () => {
       render: (_, record) => (
         <div style={{ display: "flex", gap: "8px" }}>
           <Button size="small" onClick={() => openEditModal(record)}>
-            Edit
+            <FaUserEdit />
           </Button>
           <Button
             size="small"
             danger
             onClick={() => handleDeleteUser(record)}
           >
-            Delete
+            <MdDeleteSweep />
           </Button>
         </div>
       ),
@@ -245,10 +247,13 @@ const Users = () => {
 
   return (
     <div>
+        <header className="text-center mx-auto text-2xl py-2 font-semibold shadow-md bg-white my-3">
+            Users
+        </header>
       <Table
         dataSource={users}
         columns={columns}
-        rowKey={record => record._id || record.id}
+        rowKey="_id"
         size="small"
         pagination={{ pageSize: 100 }}
       />
