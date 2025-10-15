@@ -1,124 +1,388 @@
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { useApp } from "../../context/AppContext";
+// import axios from "axios";
+
+// function CreateUser() {
+//   const navigate = useNavigate();
+//   const { API_BASE_URL, loading, setLoading } = useApp();
+//   const [formData, setFormData] = useState({
+//     first_name: "",
+//     last_name: "",
+//     email: "",
+//     phone: "",
+//     password: "",
+//   });
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     if (
+//       !formData.first_name ||
+//       !formData.last_name ||
+//       !formData.email ||
+//       !formData.phone ||
+//       !formData.password
+//     ) {
+//       toast.warning("Please fill in all form fields");
+//       return;
+//     }
+//     setLoading(true);
+
+//     const merchantData = JSON.parse(sessionStorage.getItem("merchantUser"));
+//     if (!merchantData) {
+//       toast.warning("Please login to access the admin page ");
+//       navigate("/");
+//       return;
+//     }
+
+//     try {
+//       const res = await axios.post(`${API_BASE_URL}/users`, {
+//         first_name: formData.first_name,
+//         last_name: formData.last_name,
+//         email: formData.email,
+//         phone: formData.phone,
+//         password: formData.password,
+//       });
+
+//       const userData = res.data;
+//     } catch (err) {
+//       console.log();
+//     }
+//   };
+
+//   return (
+//     <div className="bg-gray-100 flex h-screen">
+//       {/* Main Content */}
+//       <div className=" flex-1 overflow-y-auto">
+//         <div className="account min-h-dvh bg-[#f9f9f9]">
+//           <div className="account_header text-center py-7">
+//             <h3 className="font-medium text-3xl">Create User</h3>
+//           </div>
+//           <form onSubmit={handleSubmit} className="space-y-5">
+//             {/* Email Input */}
+//             <div className="mt-3">
+//               <label
+//                 htmlFor="first_name"
+//                 className="block text-sm font-medium text-gray-700 mb-1"
+//               >
+//                 First Name:
+//               </label>
+//               <div className="relative">
+//                 <FaUser className="absolute left-3 top-3 text-gray-400" />
+//                 <input
+//                   type="text"
+//                   id="first_name"
+//                   name="first_name"
+//                   value={formData.first_name}
+//                   onChange={handleChange}
+//                   placeholder="Enter your first name"
+//                   className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md focus:ring-1 focus:ring-amber-900 focus:outline-none placeholder:text-gray-300 placeholder:font-medium"
+//                 />
+//               </div>
+//             </div>
+//             <div>
+//               <label
+//                 htmlFor="last_name"
+//                 className="block text-sm font-medium text-gray-700 mb-1"
+//               >
+//                 Last Name:
+//               </label>
+//               <div className="relative">
+//                 <FaUser className="absolute left-3 top-3 text-gray-400" />
+//                 <input
+//                   type="text"
+//                   id="last_name"
+//                   name="last_name"
+//                   value={formData.last_name}
+//                   onChange={handleChange}
+//                   placeholder="Enter your last name"
+//                   className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md focus:ring-1 focus:ring-amber-900 focus:outline-none placeholder:text-gray-300 placeholder:font-medium"
+//                 />
+//               </div>
+//             </div>
+//             <div>
+//               <label
+//                 htmlFor="email"
+//                 className="block text-sm font-medium text-gray-700 mb-1"
+//               >
+//                 Email:
+//               </label>
+//               <div className="relative">
+//                 <FaUser className="absolute left-3 top-3 text-gray-400" />
+//                 <input
+//                   type="email"
+//                   id="email"
+//                   name="email"
+//                   value={formData.email}
+//                   onChange={handleChange}
+//                   placeholder="Enter your email"
+//                   className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md focus:ring-1 focus:ring-amber-900 focus:outline-none placeholder:text-gray-300 placeholder:font-medium"
+//                 />
+//               </div>
+//             </div>
+//             <div>
+//               <label
+//                 htmlFor="phone"
+//                 className="block text-sm font-medium text-gray-700 mb-1"
+//               >
+//                 Phone:
+//               </label>
+//               <div className="relative">
+//                 <FaUser className="absolute left-3 top-3 text-gray-400" />
+//                 <input
+//                   type="phone"
+//                   id="phone"
+//                   name="phone"
+//                   value={formData.phone}
+//                   onChange={handleChange}
+//                   placeholder="Enter your phone"
+//                   className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md focus:ring-1 focus:ring-amber-900 focus:outline-none placeholder:text-gray-300 placeholder:font-medium"
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Password Input */}
+//             <div>
+//               <label
+//                 htmlFor="password"
+//                 className="block text-sm font-medium text-gray-700 mb-1"
+//               >
+//                 Password:
+//               </label>
+//               <div className="relative">
+//                 <RiLockPasswordFill className="absolute left-3 top-3 text-gray-400" />
+//                 <input
+//                   type="password"
+//                   id="password"
+//                   name="password"
+//                   value={formData.password}
+//                   onChange={handleChange}
+//                   placeholder="Enter your password"
+//                   className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md focus:ring-1 focus:ring-amber-900 focus:outline-none placeholder:text-gray-300 placeholder:font-medium"
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Submit Button */}
+//             <button
+//               disabled={loading}
+//               type="submit"
+//               className={`mt-4 w-full text-center text-sm text-white py-2 rounded-md transition-colors ${
+//                 loading
+//                   ? "bg-gray-400 cursor-not-allowed"
+//                   : "bg-amber-950 hover:bg-amber-900"
+//               }`}
+//             >
+//               {loading ? "Logging in..." : "Login"}
+//             </button>
+//           </form>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+// export default CreateUser;
+
+
+
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import api from "../../api";
-import Loader from "../../components/Loader";
-import { MdCategory, MdOutlineProductionQuantityLimits, MdCreateNewFolder, MdAdminPanelSettings } from "react-icons/md";
-import { RiDashboardHorizontalFill } from "react-icons/ri";
-import { FaUserGroup, FaRegUser } from "react-icons/fa6";
-import { IoIosCreate, IoIosArrowDown } from "react-icons/io";
-import { BsCart2 } from "react-icons/bs";
-import { PiSignInBold } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
+import { useApp } from "../../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { FaUser } from "react-icons/fa";
+import { RiLockPasswordFill } from "react-icons/ri";
+import { MdOutlineAlternateEmail } from "react-icons/md";
+import { FaPhone } from "react-icons/fa6";
 
 function CreateUser() {
-    const navigate = useNavigate();
-    const MerchantUser = useState(null);
-    const [first_name, setFirstName] = useState("");
-    const [last_name, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [password, setPassword] = useState("");
-    const [err, setErr] = useState(false);
-    const [load, setLoad] = useState(false);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+  const { API_BASE_URL, loading, setLoading } = useApp(); // ✅ Correct destructuring
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (first_name == "" || last_name == "" || email == "" || phone == "" || password == "") {
-            return setErr(true);
-        }
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
 
-        const merchantData = JSON.parse(localStorage.getItem("MerchantUser"));
-        if (!merchantData || !merchantData.id) {
-            alert("No merchant logged in. Please log in as a merchant first.");
-            navigate("/login");
-            return;
-        }
+  // ✅ Handle input change dynamically
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-        const userObj = {
-            merchant_id: merchantData.id,
-            first_name,
-            last_name,
-            email,
-            phone,
-            password,
-        };
+  // ✅ Submit form
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        try {
-            setLoad(true);
-            const resp = await api.post("/users", userObj);
-            const data = await resp.data;
-
-            if (data.id) {
-                localStorage.setItem("userData", JSON.stringify(data));
-                alert("User added successfully");
-                navigate("/userlogin");
-            }
-            setFirstName("");
-            setLastName("");
-            setEmail("");
-            setPhone("");
-            setPassword("");
-        } catch (err) {
-            console.log("Error creating user:", err);
-        } finally {
-            setLoad(false);
-        }
-    };
-    const handleLogout = () => {
-        localStorage.removeItem("MerchantUser");
-        alert("Logged out successfully");
-        navigate("/login");
-    };
-
-    if (load) {
-        return <Loader fullscreen message="Creating user..." />;
+    if (
+      !formData.first_name ||
+      !formData.last_name ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.password
+    ) {
+      toast.warning("Please fill in all form fields");
+      return;
     }
 
-    return (
-        <div className="bg-gray-100 flex h-screen">
+    const merchantData = JSON.parse(sessionStorage.getItem("merchantUser"));
+    if (!merchantData) {
+      toast.warning("Please login to access the admin page");
+      navigate("/");
+      return;
+    }
 
-            {/* Main Content */}
-            <div className=" flex-1 overflow-y-auto">
+    try {
+      setLoading(true);
+      const res = await axios.post(`${API_BASE_URL}/users`, formData);
 
-                <div className="account min-h-dvh bg-[#f9f9f9]">
-                    <div className="account_header text-center py-7">
-                        <h3 className="font-medium text-3xl">Create User</h3>
-                    </div>
-                    <form className="w-[40%] mx-auto shadow-md p-5 bg-white" onSubmit={handleSubmit}>
-                        <div className="mb-4">
-                            <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">First Name</label>
-                            <input type="text" value={first_name} onChange={(e) => setFirstName(e.target.value)} className="mt-1 w-full px-3 py-2 border rounded-sm shadow-sm" />
-                            {err == true && first_name == "" ? <span className="text-red-500 text-xs">First Name Required</span> : null}
-                        </div>
-                        <div className="mb-4">
-                            <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">Last Name</label>
-                            <input type="text" value={last_name} onChange={(e) => setLastName(e.target.value)} className="mt-1 w-full px-3 py-2 border rounded-sm shadow-sm" />
-                            {err == true && last_name == "" ? <span className="text-red-500 text-xs">Last Name Required</span> : null}
-                        </div>
-                        <div className="mb-4">
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 w-full px-3 py-2 border rounded-sm shadow-sm" />
-                            {err == true && email == "" ? <span className="text-red-500 text-xs">Email Required</span> : null}
-                        </div>
-                        <div className="mb-4">
-                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
-                            <input type="number" value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 w-full px-3 py-2 border rounded-sm shadow-sm" />
-                            {err == true && phone == "" ? <span className="text-red-500 text-xs">Phone Required</span> : null}
-                        </div>
-                        <div className="mb-4">
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1 w-full px-3 py-2 border rounded-sm shadow-sm" />
-                            {err == true && password == "" ? <span className="text-red-500 text-xs">Password Required</span> : null}
-                        </div>
-                        <div className="form_btn">
-                            <button className="mt-4 text-center text-sm text-gray-700 bg-teal-900 hover:bg-teal-600 text-white py-2 px-6 cursor-pointer w-50">Create User</button>
-                        </div>
-                    </form>
-                </div>
+      if (res.data && res.data.id) {
+        toast.success("User created successfully!");
+        navigate("/users");
+      } else {
+        toast.error("Failed to create user. Try again.");
+      }
 
+      // Clear form
+      setFormData({
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: "",
+        password: "",
+      });
+    } catch (err) {
+      console.error("Error creating user:", err);
+      toast.error("An error occurred while creating user");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  return (
+    <div className="bg-gray-100 flex h-screen">
+      <div className="flex-1 overflow-y-auto">
+        <div className="account min-h-dvh bg-[#f9f9f9]">
+          <div className="account_header text-center py-7">
+            <h3 className="font-medium text-3xl">Create User</h3>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5 w-[40%] mx-auto p-6 bg-white rounded-md shadow-md">
+            {/* First Name */}
+            <div>
+              <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-1">
+                First Name:
+              </label>
+              <div className="relative">
+                <FaUser className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  type="text"
+                  id="first_name"
+                  name="first_name"
+                  value={formData.first_name}
+                  onChange={handleChange}
+                  placeholder="Enter your first name"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-amber-900 outline-none"
+                />
+              </div>
             </div>
+
+            {/* Last Name */}
+            <div>
+              <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 mb-1">
+                Last Name:
+              </label>
+              <div className="relative">
+                <FaUser className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  type="text"
+                  id="last_name"
+                  name="last_name"
+                  value={formData.last_name}
+                  onChange={handleChange}
+                  placeholder="Enter your last name"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-amber-900 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email:
+              </label>
+              <div className="relative">
+                <MdOutlineAlternateEmail className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-amber-900 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                Phone:
+              </label>
+              <div className="relative">
+                <FaPhone  className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Enter your phone number"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-amber-900 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Password */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                Password:
+              </label>
+              <div className="relative">
+                <RiLockPasswordFill className="absolute left-3 top-3 text-gray-400" />
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-amber-900 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              disabled={loading}
+              type="submit"
+              className={`mt-4 w-full text-center text-sm text-white py-2 rounded-md transition-colors ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-teal-800 hover:bg-teal-600"
+              }`}
+            >
+              {loading ? "Creating..." : "Create User"}
+            </button>
+          </form>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
+
 export default CreateUser;

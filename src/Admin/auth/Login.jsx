@@ -46,7 +46,7 @@ const Login = () => {
                 setLoading(false);
             }
         } catch (error) {
-            console.error("Login error:", error);
+            console.log("Login error:", error);
             toast.error("Server error. Please try again");
             setLoading(false);
         }
