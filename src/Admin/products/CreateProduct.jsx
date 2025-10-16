@@ -1,14 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import { MdOutlineTitle, MdOutlinePriceChange, MdOutlineDescription, MdOutlineBrandingWatermark, MdOutlineProductionQuantityLimits, MdCategory, MdOutlineImage } from "react-icons/md";
+import {
+  MdOutlineTitle,
+  MdOutlinePriceChange,
+  MdOutlineDescription,
+  MdOutlineBrandingWatermark,
+  MdOutlineProductionQuantityLimits,
+  MdCategory,
+  MdOutlineImage,
+} from "react-icons/md";
 
 function CreateProduct() {
   const navigate = useNavigate();
   const { API_BASE_URL, loading, setLoading } = useApp();
   const [categories, setCategories] = useState([]);
+  const [merchantId, setMerchantId] = useState(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -20,6 +29,42 @@ function CreateProduct() {
     category_id: "",
   });
 
+  // Fetch merchant and categories
+  useEffect(() => {
+    const merchantData = JSON.parse(sessionStorage.getItem("merchantUser"));
+    if (!merchantData || !merchantData.id) {
+      toast.warning("Merchant not found. Please log in.");
+      navigate("/");
+      return;
+    }
+
+    setMerchantId(merchantData.id);
+
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`${API_BASE_URL}/categories`, {
+          params: { merchant_id: merchantData.id },
+        });
+        const data = res.data;
+
+        if (data.length === 0) {
+          toast.info("No categories found. Please create a category first.");
+        } else {
+          setCategories(data);
+          console.log("Categories:", data);
+        }
+      } catch (error) {
+        console.log("Failed to load categories:", error);
+        toast.error("Error fetching categories");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, [navigate, API_BASE_URL, setLoading, merchantId]);
+
   // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +74,8 @@ function CreateProduct() {
   // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { title, descp, price, brand, quantity, image, category_id } =
+      formData;
 
     if (
       !formData.title ||
@@ -43,41 +90,10 @@ function CreateProduct() {
       return;
     }
 
-    // Fetch merchant and categories
-    useEffect(() => {
-      const merchantData = JSON.parse(localStorage.getItem("merchant"));
-      if (!merchantData) {
-        toast.warning("Merchant not found. Please log in.");
-        navigate("/merchant_login");
-        return;
-      }
-
-      const merchant_id = merchantData.id;
-
-      const fetchCategories = async () => {
-        try {
-          setLoading(true);
-          const res = await axios.get(`${API_BASE_URL}/categories`, {
-            params: { merchant_id },
-          });
-          const data = res.data;
-
-          if (data.length === 0) {
-            toast.info("No categories found. Please create a category first.");
-          } else {
-            setCategories(data);
-            console.log("Categories:", data);
-          }
-        } catch (error) {
-          console.error("Failed to load categories:", error);
-          toast.error("Error fetching categories");
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchCategories();
-    }, []);
+    if (!merchantId) {
+      toast.error("Merchant ID not found.");
+      return;
+    }
 
     const product_data = {
       title,
@@ -86,7 +102,7 @@ function CreateProduct() {
       brand,
       quantity: parseInt(quantity),
       images: [image],
-      currency: "USD",
+      currency: "NGN",
       min_qty: 1,
       max_qty: 5,
       discount: 0,
@@ -98,12 +114,12 @@ function CreateProduct() {
       shipping_locations: ["Nigeria"],
       attrib: [],
       category_id,
-      merchant_id,
+      merchant_id: merchantId,
     };
 
     try {
       setLoading(true);
-
+      console.log(product_data);
       const res = await axios.post(`${API_BASE_URL}/products`, product_data);
       console.log("Product created:", res.data);
       toast.success("Product created successfully");
@@ -118,10 +134,10 @@ function CreateProduct() {
         category_id: "",
       });
     } catch (err) {
-        console.log("Error creating product:", err);
-        toast.error("Failed to create product.");
+      console.log("Error creating product:", err);
+      toast.error("Failed to create product.");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 
@@ -146,7 +162,7 @@ function CreateProduct() {
                 Title:
               </label>
               <div className="relative">
-                <MdOutlineTitle  className="absolute left-3 top-3 text-gray-400" />
+                <MdOutlineTitle className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="text"
                   id="title"
@@ -168,7 +184,7 @@ function CreateProduct() {
                 Description:
               </label>
               <div className="relative">
-                <MdOutlineDescription  className="absolute left-3 top-3 text-gray-400" />
+                <MdOutlineDescription className="absolute left-3 top-3 text-gray-400" />
                 <textarea
                   id="descp"
                   name="descp"
@@ -189,7 +205,7 @@ function CreateProduct() {
                 Price:
               </label>
               <div className="relative">
-                <MdOutlinePriceChange  className="absolute left-3 top-3 text-gray-400" />
+                <MdOutlinePriceChange className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="number"
                   id="price"
@@ -211,7 +227,7 @@ function CreateProduct() {
                 Brand:
               </label>
               <div className="relative">
-                <MdOutlineBrandingWatermark  className="absolute left-3 top-3 text-gray-400" />
+                <MdOutlineBrandingWatermark className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="text"
                   id="brand"
@@ -255,7 +271,7 @@ function CreateProduct() {
                 Image:
               </label>
               <div className="relative">
-                <MdOutlineImage  className="absolute left-3 top-3 text-gray-400" />
+                <MdOutlineImage className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="text"
                   id="image"
@@ -277,7 +293,7 @@ function CreateProduct() {
                 Category:
               </label>
               <div className="relative">
-                <MdCategory  className="absolute left-3 top-3 text-gray-400" />
+                <MdCategory className="absolute left-3 top-3 text-gray-400" />
                 <select
                   type="text"
                   id="category_id"
@@ -286,12 +302,12 @@ function CreateProduct() {
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-amber-900 outline-none"
                 >
-                    <option value="">Select Category</option>
-                    {categories.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                            {cat.name}
-                        </option>
-                    ))}
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
