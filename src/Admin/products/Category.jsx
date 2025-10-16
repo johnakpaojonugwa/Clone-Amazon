@@ -11,8 +11,8 @@ function Category() {
   const { API_BASE_URL, loading, setLoading } = useApp();
 
   const [formData, setFormData] = useState({
-    category_name: "",
-    category_image: "",
+    name: "",
+    image: "",
   });
 
   // Handle input change dynamically
@@ -26,26 +26,33 @@ function Category() {
     e.preventDefault();
 
     if (
-      !formData.category_name ||
-      !formData.category_image
+      !formData.name ||
+      !formData.image
     ) {
       toast.warning("Please fill in all form fields");
       return;
     }
 
     const merchantData = JSON.parse(sessionStorage.getItem("merchantUser"));
-    if (!merchantData) {
-      toast.warning("Please login to access the admin page");
+    if (!merchantData || !merchantData.id) {
+      toast.warning("Merchant info missing, pls login again");
       navigate("/");
       return;
     }
 
     try {
       setLoading(true);
-      const res = await axios.post(`${API_BASE_URL}/categories`, formData);
+
+      const categoryData = {
+        ...formData, 
+        merchant_id: merchantData.id,
+      }
+
+      const res = await axios.post(`${API_BASE_URL}/categories`, categoryData);
 
       if (res.data && res.data.id) {
         toast.success("Category created successfully!");
+        console.log(res.data)
         navigate("/dashboard");
       } else {
         toast.error("Failed to create category. Try again.");
@@ -53,8 +60,8 @@ function Category() {
 
       // Clear form
       setFormData({
-        category_name: "",
-        category_image: "",
+        name: "",
+        image: "",
       });
     } catch (err) {
       console.log("Error creating category:", err);
@@ -82,9 +89,9 @@ function Category() {
                 <MdCategory  className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="text"
-                  id="category_name"
-                  name="category_name"
-                  value={formData.category_name}
+                  id="name"
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
                   placeholder="Enter category name"
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-amber-900 outline-none"
@@ -101,9 +108,9 @@ function Category() {
                 <FaRegImage className="absolute left-3 top-3 text-gray-400" />
                 <input
                   type="text"
-                  id="category_image"
-                  name="category_image"
-                  value={formData.category_image}
+                  id="image"
+                  name="image"
+                  value={formData.image}
                   onChange={handleChange}
                   placeholder="Enter your image URL"
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-amber-900 outline-none"
