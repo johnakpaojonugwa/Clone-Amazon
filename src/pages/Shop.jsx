@@ -31,17 +31,43 @@ const Shop = () => {
         </div>
         </div>
             <div className="min-h-screen flex">
-        <aside className="min-w-45 p-5 border-r">
+        <aside className="min-w-45 p-5 border-r ">
             <div>
                 <h6 className="font-bold">Department</h6>
             <input type="radio"/>
             <span className="text-sm">All</span>
             <br/>
+            <Link to="">
             <input type="radio"/>
             <span className="text-sm">Amazon Devices & Accessories</span>
+            </Link>
             <br/>
+            <Link to="">
             <input type="radio"/>
             <span className="text-sm">Arts, Crafts & Sewing</span>
+            </Link>
+            <br/>
+            <input type="radio"/>
+            <span className="text-sm">Automotive</span>
+            <br/>
+            <input type="radio"/>
+            <span className="text-sm">Baby Products</span>
+            <p className="text-sm text-blue-500 cursor-pointer">See more</p>
+
+            </div>
+            <div>
+                <h6 className="font-bold">Brands</h6>
+            <input type="checkbox"/>
+            <span className="text-sm">Bissell</span>
+            <br/>
+            <input type="checkbox"/>
+            <span className="text-sm">Coop Home Goods</span>
+            <br/>
+            <input type="checkbox"/>
+            <span className="text-sm">Amazon</span>
+            <br/>
+            <input type="checkbox"/>
+            <span className="text-sm">ROVE</span>
 
             </div>
         </aside>
