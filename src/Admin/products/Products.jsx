@@ -13,30 +13,35 @@ const Products = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { API_BASE_URL, loading, setLoading } = useApp();
   const [products, setProducts] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
-  // Show modal and prefill data
+  // Show modal and prefill form fields
   const openEditModal = (product) => {
-    setSelectedProducts(product);
-    form.setFieldsValue(product);
+    setSelectedProduct(product);
     setIsModalOpen(true);
+    setTimeout(() => {
+      form.setFieldsValue(product);
+    }, 0);
   };
+
 
   const handleCancel = () => {
     setIsModalOpen(false);
     form.resetFields();
-    setSelectedProducts(null);
+    setSelectedProduct(null);
   };
 
+  // Fetch products on mount
   useEffect(() => {
     const merchantData = JSON.parse(sessionStorage.getItem("merchantUser"));
     if (!merchantData) {
-      toast.warning("Please login to access the admin page ");
+      toast.warning("Merchnat not found. Please log in.");
       navigate("/");
       return;
     }
+
     const getProducts = async () => {
       try {
         setLoading(true);
@@ -44,50 +49,48 @@ const Products = () => {
           `${API_BASE_URL}/products?merchant_id=${merchantData.id}`
         );
         setProducts(res?.data?.data || []);
-        console.log(res.data);
+        console.log(res)
       } catch (error) {
         toast.error("Error fetching products");
-        console.log(error);
+        console.log("Error fetching products:", error);
       } finally {
         setLoading(false);
       }
     };
 
     getProducts();
-  }, []);
+  }, [API_BASE_URL, navigate, setLoading]);
 
-  //edit product
+  // Update a product
   const handleEditProduct = async (values) => {
+    // if (!selectedProduct?._id) return;
     try {
       setLoading(true);
+      const res = await axios.put(`${API_BASE_URL}/products/${selectedProduct.id}`, values);
 
-      const res = await axios.put(
-        `${API_BASE_URL}/products/${selectedProducts._id}`,
-        values
-      );
-      toast.success("products updated successfully!");
+      toast.success("Product updated successfully!");
 
-      // Refresh product list
       setProducts((prevProducts) =>
         prevProducts.map((p) =>
-          p._id === selectedProducts._id ? { ...p, ...values } : p
+          p.id === selectedProduct.id ? { ...p, ...values } : p
         )
       );
 
-      handleCancel();
-      setSelectedProducts(null);
+      setIsModalOpen(false);
+      form.resetFields();
+      setSelectedProduct(null);
     } catch (error) {
-      toast.error("Error updating products");
-      console.log("Error updating products:", error);
+      toast.error("Error updating product");
+      console.error("Update error:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  //delete product
+  // Delete a product
   const handleDeleteProduct = (product) => {
     confirm({
-      title: `Are you sure you want to delete "${product.title}"?`,
+      title: `Are you sure you want to delete ${product.title}?`,
       icon: <ExclamationCircleOutlined />,
       okText: "Yes, Delete",
       okType: "danger",
@@ -95,11 +98,13 @@ const Products = () => {
       async onOk() {
         try {
           setLoading(true);
-          await axios.delete(`${API_BASE_URL}/products/${product._id}`);
-          setProducts((prev) => prev.filter((u) => u._id !== product._id));
+          await axios.delete(`${API_BASE_URL}/products/${product.id}`);
+
+          toast.success("Product deleted successfully!");
+          setProducts((prev) => prev.filter((p) => p.id !== product.id));
         } catch (error) {
           toast.error("Error deleting product");
-          console.error("Delete error:", error.response?.data || error.message);
+          console.log("Delete error:", error.response?.data || error.message);
         } finally {
           setLoading(false);
         }
@@ -117,10 +122,15 @@ const Products = () => {
       title: "Image",
       dataIndex: "image",
       key: "image",
-      render: (image) =>
-        image ? (
+      render: (image) => {
+        const imgSrc = Array.isArray(image)
+          ? image[0]
+          : typeof image === "string"
+            ? image
+            : image?.url || null;
+        return imgSrc ? (
           <Image
-            src={Array.isArray(image) ? image[0] : image}
+            src={imgSrc}
             alt="product"
             width={100}
             height={100}
@@ -128,7 +138,8 @@ const Products = () => {
           />
         ) : (
           "No image"
-        ),
+        );
+      },
     },
     {
       title: "Price (₦)",
@@ -159,21 +170,23 @@ const Products = () => {
       ),
     },
   ];
+
   return (
     <div>
       <header className="text-center mx-auto text-2xl py-2 font-semibold shadow-md bg-white my-3">
-        products
+        Products
       </header>
+
       <Table
         dataSource={products}
         columns={columns}
         rowKey="id"
         size="small"
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 5, showSizeChanger: true }}
       />
 
       <Modal
-        title="Edit product"
+        title="Edit Product"
         open={isModalOpen}
         onCancel={handleCancel}
         footer={null}
@@ -196,7 +209,7 @@ const Products = () => {
           <Form.Item
             label="Image"
             name="image"
-            rules={[{ required: true, message: "Please enter Image URL" }]}
+            rules={[{ required: true, message: "Please enter image URL" }]}
           >
             <Input placeholder="Image URL" />
           </Form.Item>
@@ -225,9 +238,11 @@ const Products = () => {
         </Form>
       </Modal>
 
+
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
 
 export default Products;
+

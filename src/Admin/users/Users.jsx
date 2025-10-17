@@ -97,7 +97,7 @@ const Users = () => {
           setUsers((prev) => prev.filter((u) => u._id !== user._id));
         } catch (error) {
           toast.error("Error deleting user");
-          console.error("Delete error:", error.response?.data || error.message);
+          console.log("Delete error:", error.response?.data || error.message);
         } finally {
           setLoading(false);
         }

@@ -164,7 +164,6 @@ function Layout() {
                         theme === "dark" ? "bg-gray-900 text-teal-600" : "bg-gray-100 text-teal-600"
                     }`}
                 >
-                    {/* Render all page content (including your summary cards) */}
                     <Outlet />
                 </main>
             </div>
