@@ -8,6 +8,8 @@ import Nav from "./components/Nav";
 import SubHeader from "./components/SubHeader";
 import SubFooter from "./components/SubFooter";
 import MainFooter from "./components/MainFooter";
+import Register from "./pages/Register";
+import SignIn from "./pages/SignIn";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/cart" element={<Cart/>} />
         <Route path="/shop" element={<Shop/>} />
+        <Route path="/register" element={<Register/>}/>
+        <Route path="/signin" element={<SignIn/>} />
       </Routes>
       <SubFooter/>
       <MainFooter/>

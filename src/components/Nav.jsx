@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { FaSearch, FaShoppingCart } from "react-icons/fa";
 
-const Nav = () => (
-  <nav className="bg-[#131921] text-white p-2 text-sm">
+function Nav() {
+  const user = JSON.parse(sessionStorage.getItem("user"))
+
+  return(
+      <nav className="bg-[#131921] text-white p-2 text-sm">
     <div className="flex items-center justify-between max-w-7xl mx-auto">
       <div className="flex items-center gap-4">
         <span className="font-bold text-lg text-white"><Link to={"/"}>Amazon</Link></span>
@@ -21,21 +24,33 @@ const Nav = () => (
       </div>
 
       <div className="flex items-center gap-6 text-xs">
-        <span>
-          Hello, <Link to={"/login"} className="text-blue-400">Sign IN</Link><br />
-          <strong>Account & Lists</strong>
+           <span>
+      Hello,{" "}
+      {user ? (
+        <span className="text-yellow-600 font-semibold">
+          {user.first_name}
         </span>
+      ) : (
+        <Link to="/signin" className="text-blue-400">
+          Sign In
+        </Link>
+      )}
+      <br />
+      <strong>Account & Lists</strong>
+    </span>
+
         <span>
           Returns<br />
           <strong>& Orders</strong>
         </span>
-        <Link to="/cart" className="flex items-center gap-1">
+        <Link to="/cart" className="flex items-center gap-1  text-2xl">
           <FaShoppingCart />
           Cart
         </Link>
       </div>
     </div>
   </nav>
-);
+  )
+}
 
 export default Nav;
