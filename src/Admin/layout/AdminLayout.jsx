@@ -15,7 +15,7 @@ import { PiSignInBold } from "react-icons/pi";
 import { IoMenu } from "react-icons/io5";
 import { useApp } from "../../context/AppContext";
 
-function Layout() {
+function AdminLayout() {
     const { merchantUser, setMerchantUser, theme, toggleTheme } = useApp();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -171,5 +171,5 @@ function Layout() {
     );
 }
 
-export default Layout;
+export default AdminLayout;
 

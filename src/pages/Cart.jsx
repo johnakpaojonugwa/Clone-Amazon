@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useApp } from "../../context/AppContext";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import { useApp } from "../context/AppContext";
 
 function Cart() {
   const { API_BASE_URL, loading, setLoading } = useApp();
@@ -192,3 +192,6 @@ function Cart() {
 }
 
 export default Cart;
+
+
+
