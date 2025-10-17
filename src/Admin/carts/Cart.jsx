@@ -101,7 +101,7 @@ function Cart() {
           {loading ? (
             <p>Loading cart...</p>
           ) : cartItems.length === 0 ? (
-            <h1 className="text-center text-2xl font-bold p-10">
+            <h1 className="">
               Your cart is empty.
             </h1>
           ) : (
