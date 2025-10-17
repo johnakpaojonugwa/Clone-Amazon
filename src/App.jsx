@@ -10,6 +10,7 @@ import SubFooter from "./components/SubFooter";
 import MainFooter from "./components/MainFooter";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
+import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/shop" element={<Shop/>} />
         <Route path="/register" element={<Register/>}/>
         <Route path="/signin" element={<SignIn/>} />
+        <Route path="/checkout" element={<Checkout/>} />
       </Routes>
       <SubFooter/>
       <MainFooter/>
