@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { PiSignInBold } from "react-icons/pi";
 import { IoMenu } from "react-icons/io5";
 import { useApp } from "../../context/AppContext";
+import { toast } from "react-toastify";
 
 function AdminLayout() {
     const { merchantUser, setMerchantUser, theme, toggleTheme } = useApp();
@@ -33,7 +34,7 @@ function AdminLayout() {
     const handleLogout = () => {
         sessionStorage.removeItem("merchantUser");
         setMerchantUser(null);
-        alert("Logged out successfully");
+        toast.success("Logged out successfully");
         navigate("/");
     };
 
@@ -60,13 +61,13 @@ function AdminLayout() {
                 {/* Navigation */}
                 <nav className="flex-1 space-y-2 mt-2">
                     {[
-                        { to: "", label: "Dashboard", icon: <RiDashboardHorizontalFill className="text-teal-500" /> },
-                        { to: "category", label: "Category", icon: <MdCategory className="text-teal-500" /> },
-                        { to: "products", label: "Products", icon: <MdOutlineProductionQuantityLimits className="text-teal-500" /> },
-                        { to: "users", label: "Users", icon: <FaUserGroup className="text-teal-500" /> },
-                        { to: "createproduct", label: "Create Product", icon: <IoIosCreate className="text-teal-500" /> },
-                        { to: "createuser", label: "Create User", icon: <MdCreateNewFolder className="text-teal-500" /> },
-                        { to: "cart", label: "Cart", icon: <BsCart2 className="text-teal-500" /> },
+                        { to: "", label: "Dashboard", icon: <RiDashboardHorizontalFill className="text-teal-500 text-2xl" /> },
+                        { to: "category", label: "Category", icon: <MdCategory className="text-teal-500 text-2xl" /> },
+                        { to: "products", label: "Products", icon: <MdOutlineProductionQuantityLimits className="text-teal-500 text-2xl" /> },
+                        { to: "users", label: "Users", icon: <FaUserGroup className="text-teal-500 text-2xl" /> },
+                        { to: "createproduct", label: "Create Product", icon: <IoIosCreate className="text-teal-500 text-2xl" /> },
+                        { to: "createuser", label: "Create User", icon: <MdCreateNewFolder className="text-teal-500 text-2xl" /> },
+                        { to: "admin-cart", label: "Cart", icon: <BsCart2 className="text-teal-500 text-2xl" /> },
                     ].map((item) => (
                         <Link
                             key={item.label}
@@ -85,7 +86,7 @@ function AdminLayout() {
                 {/* Logout */}
                 <div
                     onClick={handleLogout}
-                    className="mt-auto flex items-center gap-3 py-3 px-3 hover:bg-red-600 hover:text-white cursor-pointer transition-all"
+                    className="mt-auto flex items-center gap-3 py-3 px-3 my-50 hover:bg-red-600 hover:text-white cursor-pointer transition-all"
                 >
                     <PiSignInBold className="text-2xl text-red-500" />
                     {sidebarOpen && <span>Sign out</span>}

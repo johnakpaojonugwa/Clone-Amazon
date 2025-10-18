@@ -14,10 +14,10 @@ function Cart() {
   const fetchCart = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
+      const res = await axios.get(
         `${API_BASE_URL}/carts?user_id=${userId}`
       );
-      setCartItems(response.data.data || []);
+      setCartItems(res.data.data || []);
     } catch (error) {
       toast.error("Failed to fetch cart");
       console.log("Failed to fetch cart:", error);
@@ -46,6 +46,7 @@ function Cart() {
       });
       fetchCart();
     } catch (error) {
+      toast.error("Failed to update quantity");
       console.log("Failed to update quantity:", error);
     } finally {
       setLoading(false);
@@ -64,7 +65,7 @@ function Cart() {
       });
       fetchCart();
     } catch (error) {
-      console.error("Failed to delete cart item:", error);
+      console.log("Failed to delete cart item:", error);
     } finally {
       setLoading(false);
     }
@@ -75,10 +76,11 @@ function Cart() {
     try {
       setLoading(true);
       await axios.post(`${API_BASE_URL}/carts/checkout`, { user_id: userId });
-      alert("✅ Checkout successful!");
+      toast.success("Checkout successful!");
       setCartItems([]);
     } catch (error) {
-      console.error("Checkout failed:", error);
+      toast.error("Checkout failed")
+      console.log("Checkout failed:", error);
     } finally {
       setLoading(false);
     }

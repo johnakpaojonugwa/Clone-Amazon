@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function SignIn() {
   const baseURL = "http://ecommerce.reworkstaging.name.ng/v2";
@@ -49,7 +50,7 @@ function SignIn() {
         password: formData.password,
       });
 
-      // ✅ Check if response is valid
+      // Check if response is valid
       if (
         response.status === 200 &&
         response.data &&
@@ -57,13 +58,13 @@ function SignIn() {
       ) {
         // Save only user info to localStorage
         sessionStorage.setItem("user", JSON.stringify(response.data.user || response.data));
-        alert("✅ Login successful!");
-        navigate("/");
+        toast.success("Login successful!");
+        navigate("/home");
       } else {
         throw new Error("Invalid login response from server.");
       }
     } catch (error) {
-      console.error("❌ Login failed:", error);
+      console.log("Login failed:", error);
 
       if (error.response) {
         setApiError(error.response.data.message || "Invalid email or password.");
@@ -141,7 +142,7 @@ function SignIn() {
         <div className="text-sm mt-6 text-center">
           <p className="text-gray-700">
             Don't have an account?{" "}
-            <Link to="/register" className="text-blue-600 hover:underline">
+            <Link to="/home/register" className="text-blue-600 hover:underline">
               Create one
             </Link>
           </p>

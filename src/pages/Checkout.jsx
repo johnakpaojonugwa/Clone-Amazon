@@ -6,7 +6,7 @@ function Checkout() {
   const navigate = useNavigate();
 
   const handleBackToCart = () => {
-    navigate("/cart");
+    navigate("/home/cart");
   };
 
   return (
