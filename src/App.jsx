@@ -18,6 +18,9 @@ import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import Checkout from "./pages/Checkout";
 import FrontendLayout from "./pages/FrontendLayout";
+import Shop from "./pages/Shop";
+import Product from "./pages/Product";
+
 
 
 function App() {
@@ -40,6 +43,8 @@ function App() {
         {/* Frontend routes */}
         <Route path="/home" element={<FrontendLayout />}>
           <Route path="" element={<Home />} />
+          <Route path="shop" element={<Shop />} />
+          <Route path="product/:id" element={<Product />} />
           <Route path="cart" element={<Cart />} />
           <Route path="register" element={<Register />} />
           <Route path="signin" element={<SignIn />} />

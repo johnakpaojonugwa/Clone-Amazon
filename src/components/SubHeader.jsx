@@ -23,7 +23,7 @@ const SubHeader = () => {
           <FaBars />
           <span className="whitespace-nowrap">All</span>
         </button>
-        <Link to="/shop" className="whitespace-nowrap hover:underline">
+        <Link to="/home/shop" className="whitespace-nowrap hover:underline">
           Today's Deals
         </Link>
         <Link to={''} className="whitespace-nowrap hover:underline">Registry</Link>
