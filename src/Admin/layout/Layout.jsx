@@ -1,4 +1,3 @@
-
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { RiDashboardHorizontalFill } from "react-icons/ri";
 import {
@@ -60,6 +59,7 @@ function Layout() {
                 {/* Navigation */}
                 <nav className="flex-1 space-y-2 mt-2">
                     {[
+// <<<<<<< HEAD
                         { to: "", label: "Dashboard", icon: <RiDashboardHorizontalFill /> },
                         { to: "category", label: "Category", icon: <MdCategory /> },
                         { to: "products", label: "Products", icon: <MdOutlineProductionQuantityLimits /> },
@@ -67,6 +67,15 @@ function Layout() {
                         { to: "createproduct", label: "Create Product", icon: <IoIosCreate /> },
                         { to: "createuser", label: "Create User", icon: <MdCreateNewFolder /> },
                         { to: "cart", label: "Cart", icon: <BsCart2 /> },
+// =======
+                        { to: "", label: "Dashboard", icon: <RiDashboardHorizontalFill className="text-teal-500" /> },
+                        { to: "category", label: "Category", icon: <MdCategory className="text-teal-500" /> },
+                        { to: "products", label: "Products", icon: <MdOutlineProductionQuantityLimits className="text-teal-500" /> },
+                        { to: "users", label: "Users", icon: <FaUserGroup className="text-teal-500" /> },
+                        { to: "createproduct", label: "Create Product", icon: <IoIosCreate className="text-teal-500" /> },
+                        { to: "createuser", label: "Create User", icon: <MdCreateNewFolder className="text-teal-500" /> },
+                        { to: "cart", label: "Cart", icon: <BsCart2 className="text-teal-500" /> },
+// >>>>>>> origin/master
                     ].map((item) => (
                         <Link
                             key={item.label}
@@ -85,9 +94,14 @@ function Layout() {
                 {/* Logout */}
                 <div
                     onClick={handleLogout}
+// <<<<<<< HEAD
                     className="mt-auto flex items-center gap-3 py-3 px-3 hover:bg-red-600 hover:text-white rounded-lg cursor-pointer transition-all"
                 >
-                    <PiSignInBold className="text-2xl" />
+{/* ======= */}
+                    {/* className="mt-auto flex items-center gap-3 py-3 px-3 hover:bg-red-600 hover:text-white cursor-pointer transition-all"
+                > */}
+                    <PiSignInBold className="text-2xl text-red-500" />
+{/* >>>>>>> origin/master */}
                     {sidebarOpen && <span>Sign out</span>}
                 </div>
 

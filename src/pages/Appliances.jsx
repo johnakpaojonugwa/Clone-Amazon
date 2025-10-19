@@ -6,7 +6,7 @@ import ProductDetails from "./ProductDetails"
 import { Button, Modal, Input, Form, Table, Image } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 
-const Shop = () => {
+function Appliances() {
     const { API_BASE_URL, loading, setLoading } = useApp();
     const [products, setProducts] = useState([]);
 
@@ -68,14 +68,14 @@ const Shop = () => {
                     <p className="color-gray-700 text-sm cursor-pointer border-b border-transparent hover:border-blue-900 hover:text-blue-900 p-1.5">Grocery Deals</p>
                 </nav>
                 <div className="flex flex-wrap gap-2 justify-center h-30 items-center">
-                        <Link to="/shop/cellphones&accessories">
-                    <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px]">Cellphones & Accessories</p>
+                    <Link to="/shop/cellphones">
+                        <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px]">Cellphones & Accessories</p>
                     </Link>
-                        <Link to="/shop/appliances">
-                    <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px]">Appliances</p>
+                    <Link to="/shop/appliances">
+                        <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px] bg-gray-200">Appliances</p>
                     </Link>
-                        <Link to="/shop/automotive">
-                    <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px]">Automotive</p>
+                    <Link to="/shop/automotive">
+                        <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px]">Automotive</p>
                     </Link>
                 </div>
             </div>
@@ -83,25 +83,25 @@ const Shop = () => {
                 <aside className="min-w-45 p-5 border-r ">
                     <div>
                         <h6 className="font-bold">Department</h6>
-                        
+
                         <Link to="/shop">
-                        <input type="radio" checked />
-                        <span className="text-sm">All</span>
+                            <input type="radio" />
+                            <span className="text-sm">All</span>
                         </Link>
                         <br />
-                        <Link to="/shop/cellphones_Accessories">
+                        <Link to="/shop/cellphones">
                             <input type="radio" />
                             <span className="text-sm">Cellphones & Accessories</span>
                         </Link>
                         <br />
                         <Link to="/shop/appliances">
-                            <input type="radio" />
+                            <input type="radio" checked/>
                             <span className="text-sm">Appliances</span>
                         </Link>
                         <br />
                         <Link to="/shop/automotive">
-                        <input type="radio"/>
-                        <span className="text-sm">Automotive</span>
+                            <input type="radio" />
+                            <span className="text-sm">Automotive</span>
                         </Link>
                         <br />
                         <input type="radio" />
@@ -140,25 +140,25 @@ const Shop = () => {
                             </div>
                     }
 
-                {/* </div>
-                <div> */}
+                    {/* </div>
+                    <div> */}
                     <ProductDetails
                         dataSource={products}
                         columns={columns}
                         rowKey="id"
                         size="small"
                     />
-                            <Form.Item
-                                label="Title"
-                                // name="title"
-                                rules={[{ required: true, message: "Please enter product title" }]}
-                            />
+                    <Form.Item
+                        label="Title"
+                        // name="title"
+                        rules={[{ required: true, message: "Please enter product title" }]}
+                    />
 
-                            <Form.Item
-                                label="Image"
-                                // name="image"
-                                rules={[{ required: true, message: "Please enter Image URL" }]}
-                            />
+                    <Form.Item
+                        label="Image"
+                        // name="image"
+                        rules={[{ required: true, message: "Please enter Image URL" }]}
+                    />
                 </div>
             </div>
 
@@ -172,4 +172,4 @@ const Shop = () => {
         </>
     )
 }
-export default Shop;
+export default Appliances;
