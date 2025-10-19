@@ -25,12 +25,13 @@ function Dashboard() {
     const userData = JSON.parse(localStorage.getItem("Account_login")) || {};
 
     const fetchTotalProducts = async () => {
-        try {
-          setLoading(true);
+      try {
+        setLoading(true);
+        
         const res = await axios.get(
-          `${API_BASE_URL}/products?merchant_id=${merchantData.id}`
+          `${ API_BASE_URL }/products?merchant_id=${ merchantData.id }`
         );
-        const data =  res.data;
+        const data = res.data;
         const count = data.total ?? (Array.isArray(data) ? data.length : 0);
         setTotalProducts(count);
       } catch (err) {
@@ -41,16 +42,16 @@ function Dashboard() {
     };
 
     const fetchTotalUsers = async () => {
-        try {
-          setLoading(true);
-        const res = await axios.get(`${API_BASE_URL}/users`);
+      try {
+        setLoading(true);
+        const res = await axios.get(`${ API_BASE_URL }/users`);
         setTotalUsers(res.data.length);
       } catch (err) {
         console.log("Error fetching total users:", err);
-    } finally {
+      } finally {
         setLoading(false)
-    }
-    
+      }
+
     };
 
     const fetchTotalCartProducts = async () => {
@@ -62,8 +63,8 @@ function Dashboard() {
       }
 
       try {
-          setLoading(true);
-        const res = await axios.get(`${API_BASE_URL}/carts?user_id=${user_id}`);
+        setLoading(true);
+        const res = await axios.get(`${ API_BASE_URL }/carts?user_id=${ user_id }`);
         const cartItems = res.data.data || res.data || [];
         const totalQuantity = cartItems.reduce(
           (sum, item) => sum + (item.quantity || 0),
@@ -79,10 +80,10 @@ function Dashboard() {
     };
 
     const fetchProducts = async () => {
-        try {
-          setLoading(true);
+      try {
+        setLoading(true);
         const res = await axios.get(
-          `${API_BASE_URL}/products?merchant_id=${merchantData.id}`
+          `${ API_BASE_URL }/products?merchant_id=${ merchantData.id }`
         );
         const data = Array.isArray(res.data) ? res.data : res.data.data || [];
         setProducts(data);
@@ -99,7 +100,7 @@ function Dashboard() {
     fetchProducts();
   }, []);
 
-   const columns = [
+  const columns = [
     {
       title: "Title",
       dataIndex: "title",

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Button, Modal, Input, Form, Table, Image } from "antd";
-const { confirm } = Modal;
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useApp } from "../../context/AppContext";
 import axios from "axios";
@@ -10,6 +9,7 @@ import { FaUserEdit } from "react-icons/fa";
 import { MdDeleteSweep } from "react-icons/md";
 
 const Products = () => {
+  const { confirm } = Modal;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { API_BASE_URL, loading, setLoading } = useApp();
   const [products, setProducts] = useState([]);

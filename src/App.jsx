@@ -1,5 +1,4 @@
-import { Route, Routes } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NotFound from "./pages/notfound/NotFound";
 //admin imports
 import Login from "./Admin/auth/Login";
@@ -18,12 +17,16 @@ import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import Checkout from "./pages/Checkout";
 import FrontendLayout from "./pages/FrontendLayout";
+import Cellphones from "./pages/Cellphones";
+import Automotive from "./pages/Automotive";
+import Appliances from "./pages/Appliances";
+import Product from "./pages/Product";
+import Shop from "./pages/Shop"
 
 
 function App() {
   return (
-    <>
-      <ToastContainer />
+    <BrowserRouter>
       <Routes>
         {/* Admin routes */}
         <Route path="/" element={<Login />} />
@@ -44,11 +47,16 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="signin" element={<SignIn />} />
           <Route path="checkout" element={<Checkout />} />
+          <Route path="shop" element={<Shop />} />
+          <Route path="shop/automotive" element={<Automotive />} />
+          <Route path="/shop/cellphones" element={<Cellphones />} />
+          <Route path="/shop/appliances" element={<Appliances />} />
+          <Route path="/shop/:id" element={<Product />} />
         </Route>
         {/* Not found route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+    </BrowserRouter>
   )
 };
 

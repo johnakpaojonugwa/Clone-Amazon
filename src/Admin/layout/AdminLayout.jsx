@@ -1,4 +1,3 @@
-
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { RiDashboardHorizontalFill } from "react-icons/ri";
 import {
@@ -88,7 +87,9 @@ function AdminLayout() {
                     onClick={handleLogout}
                     className="mt-auto flex items-center gap-3 py-3 px-3 my-50 hover:bg-red-600 hover:text-white cursor-pointer transition-all"
                 >
-                    <PiSignInBold className="text-2xl text-red-500" />
+
+                    <PiSignInBold className="text-2xl text-red-500" />0
+
                     {sidebarOpen && <span>Sign out</span>}
                 </div>
 
