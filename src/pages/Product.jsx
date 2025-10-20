@@ -36,15 +36,7 @@ const Product = () => {
     getProduct();
   }, [API_BASE_URL, id, navigate, setLoading]);
 
-  // useEffect(() => {
-  //     const SingleProduct = async () => {
-  //         const resp = await axios.get(`products?merchant_id=123&category_id=${id}`);
-  //         const data = await resp.data;
-  //         setProduct(data);
-  //     };
-  //     SingleProduct();
-  // }, []);
- if (!product) {
+ if (!products) {
     return (
       <div className="h-screen flex items-center justify-center">
         <h3 className="text-gray-600">Product not found.</h3>
