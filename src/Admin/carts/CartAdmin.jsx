@@ -1,94 +1,46 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useApp } from "../../context/AppContext";
-import { toast, ToastContainer } from "react-toastify";
+import { useEffect } from "react";
 
 function CartAdmin() {
-  const { API_BASE_URL, loading, setLoading } = useApp();
+  const {
+    API_BASE_URL,
+    loading,
+    setLoading,
+    cartItems,
+    addToCart,
+    decrement,
+    totalPrice,
+    fetchCart,
+    removeFromCart,
+  } = useApp();
+
+  const subtotal = totalPrice;
+
   const user = JSON.parse(sessionStorage.getItem("user"));
   const userId = user?.id;
 
-  const [cartItems, setCartItems] = useState([]);
-
-  // Fetch cart items
-  const fetchCart = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(
-        `${API_BASE_URL}/carts?user_id=${userId}`
-      );
-      setCartItems(response.data.data || []);
-    } catch (error) {
-      toast.error("Failed to fetch cart");
-      console.log("Failed to fetch cart:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Fetch cart on load
   useEffect(() => {
-    if (userId) fetchCart();
+    if (userId) fetchCart(userId);
   }, [userId]);
 
-  // Update quantity
-  const updateQuantity = async (item, action) => {
-    const newQty =
-      action === "increase" ? item.quantity + 1 : item.quantity - 1;
-    if (newQty < 1) return;
-
-    try {
-      setLoading(true);
-      await axios.post(`${API_BASE_URL}/carts`, {
-        user_id: userId,
-        product_id: item.product_id,
-        has_variation: false,
-        quantity: newQty,
-      });
-      fetchCart();
-    } catch (error) {
-      console.log("Failed to update quantity:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Delete item
-  const deleteItem = async (item) => {
-    try {
-      setLoading(true);
-      await axios.delete(`${API_BASE_URL}/carts`, {
-        data: {
-          user_id: userId,
-          product_id: item.product_id,
-        },
-      });
-      fetchCart();
-    } catch (error) {
-      console.error("Failed to delete cart item:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Checkout cart
+  // Checkout function
   const handleCheckout = async () => {
     try {
       setLoading(true);
       await axios.post(`${API_BASE_URL}/carts/checkout`, { user_id: userId });
-      alert("✅ Checkout successful!");
-      setCartItems([]);
+      toast.success("Checkout successful!");
+      await fetchCart(userId);
     } catch (error) {
-      console.error("Checkout failed:", error);
+      console.log("Checkout failed:", error);
+      toast.error("Checkout failed");
     } finally {
       setLoading(false);
     }
   };
 
-  // subtotal
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -101,9 +53,7 @@ function CartAdmin() {
           {loading ? (
             <p>Loading cart...</p>
           ) : cartItems.length === 0 ? (
-            <h1 className="">
-              Your cart is empty.
-            </h1>
+            <h1>Your cart is empty.</h1>
           ) : (
             cartItems.map((item, index) => (
               <div
@@ -128,30 +78,29 @@ function CartAdmin() {
 
                   <div className="flex items-center gap-2 mt-3">
                     <button
-                      onClick={() => updateQuantity(item, "decrease")}
+                      onClick={() => decrement(item)}
                       className="px-2 py-1 border rounded"
                     >
                       -
                     </button>
-                    <span>{item.quantity}</span>
+                    <span>{item.qty}</span>
                     <button
-                      onClick={() => updateQuantity(item, "increase")}
+                      onClick={() => addToCart (item)}
                       className="px-2 py-1 border rounded"
                     >
                       +
                     </button>
                     <button
-                      onClick={() => deleteItem(item)}
+                      onClick={() => removeFromCart(item.id)}
                       className="text-blue-500 ml-4"
                     >
                       Delete
                     </button>
-                    <button className="text-blue-500">Save for later</button>
                   </div>
                 </div>
 
                 <div className="text-right text-lg font-semibold">
-                  ₦{(item.price * item.quantity).toLocaleString()}
+                  ₦{(item.price * item.qty).toFixed(2)}
                 </div>
               </div>
             ))
@@ -161,7 +110,7 @@ function CartAdmin() {
             <div className="text-right mt-4 text-lg font-semibold">
               Subtotal ({cartItems.length} item
               {cartItems.length > 1 ? "s" : ""}):{" "}
-              <span className="text-xl">₦{subtotal.toLocaleString()}</span>
+              <span className="text-xl">₦{subtotal.toFixed(2)}</span>
             </div>
           )}
         </div>
@@ -171,7 +120,7 @@ function CartAdmin() {
           <h3 className="text-lg font-medium">
             Subtotal ({cartItems.length} item
             {cartItems.length > 1 ? "s" : ""}):{" "}
-            <span className="font-semibold">₦{subtotal.toLocaleString()}</span>
+            <span className="font-semibold">₦{subtotal.toFixed(2)}</span>
           </h3>
 
           <label className="flex items-center gap-2 mt-2 text-sm">

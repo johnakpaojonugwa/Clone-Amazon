@@ -1,96 +1,181 @@
-import { useEffect, useState } from "react";
+// import axios from "axios";
+// import { toast } from "react-toastify";
+// import { useApp } from "../context/AppContext";
+// import { useEffect } from "react";
+
+// function Cart() {
+//   const {
+//     API_BASE_URL,
+//     loading,
+//     setLoading,
+//     cartItems,
+//     addToCart,
+//     decrement,
+//     totalPrice,
+//     fetchCart,
+//     removeFromCart,
+//   } = useApp();
+
+//   const user = JSON.parse(sessionStorage.getItem("user"));
+//   const userId = user?.id;
+
+//   useEffect(() => {
+//     if (userId) fetchCart(userId);
+//   }, [userId]);
+//   // console.log("User from session:", user);
+//   // console.log("User ID:", userId);
+
+//   const handleCheckout = async () => {
+//     try {
+//       setLoading(true);
+//       await axios.post(`${API_BASE_URL}/carts/checkout`, { user_id: userId });
+//       toast.success("Checkout successful!");
+//       fetchCart(userId);
+//     } catch (error) {
+//       toast.error("Checkout failed");
+//       console.log(error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="bg-gray-100 min-h-screen">
+//       <div className="max-w-7xl mx-auto p-4 flex flex-col lg:flex-row gap-6">
+//         {/* LEFT — CART ITEMS */}
+//         <div className="flex-1 bg-white p-4 rounded-md shadow-sm">
+//           <h2 className="text-2xl font-semibold mb-4">Shopping Cart</h2>
+//           <hr className="mb-4" />
+
+//           {loading ? (
+//             <p>Loading cart...</p>
+//           ) : cartItems.length > 0 ? (
+//             cartItems.map((item, index) => {
+//               const img = item.images || "/placeholder.png";
+//               const title = item.title || "Unknown Product";
+//               const descp = item.descp || "";
+//               const qty = item.quantity || 1;
+//               const price = Number(item.price) || 0;
+
+//               return (
+//                 <div
+//                   key={index}
+//                   className="flex flex-col md:flex-row gap-4 py-4 border-b border-gray-200"
+//                 >
+//                   <img
+//                     src={img}
+//                     alt={title}
+//                     className="w-32 h-32 object-contain mx-auto md:mx-0"
+//                   />
+
+//                   <div className="flex-1">
+//                     <h3 className="text-lg font-medium">{title}</h3>
+//                     <p className="text-sm text-gray-600">{descp}</p>
+//                     <div className="flex items-center gap-2 mt-3">
+//                       <button
+//                         onClick={() => decrement(item.id)}
+//                         className="px-2 py-1 border rounded"
+//                       >
+//                         -
+//                       </button>
+//                       <span>{qty}</span>
+//                       <button
+//                         onClick={() => addToCart(item.id)}
+//                         className="px-2 py-1 border rounded"
+//                       >
+//                         +
+//                       </button>
+//                       <button
+//                         onClick={() => removeFromCart(item.id)}
+//                         className="text-blue-500 ml-4"
+//                       >
+//                         Delete
+//                       </button>
+//                     </div>
+//                   </div>
+
+//                   <div className="text-right text-lg font-semibold">
+//                     ₦{(price * qty).toFixed(2)}
+//                   </div>
+//                 </div>
+//               );
+//             })
+//           ) : (
+//             <h1>Your cart is empty.</h1>
+//           )}
+
+//           {cartItems.length > 0 && (
+//             <div className="text-right mt-4 text-lg font-semibold">
+//               Subtotal ({cartItems.length} item{cartItems.length > 1 ? "s" : ""}
+//               ): <span className="text-xl">₦{totalPrice.toFixed(2)}</span>
+//             </div>
+//           )}
+//         </div>
+
+//         {/* RIGHT — CHECKOUT BOX */}
+//         <div className="w-full lg:w-1/3 bg-white p-4 rounded-md shadow-sm h-fit">
+//           <h3 className="text-lg font-medium">
+//             Subtotal ({cartItems.length} item{cartItems.length > 1 ? "s" : ""}):{" "}
+//             <span className="font-semibold">₦{totalPrice.toFixed(2)}</span>
+//           </h3>
+
+//           <label className="flex items-center gap-2 mt-2 text-sm">
+//             <input type="checkbox" />
+//             This order contains a gift
+//           </label>
+
+//           <button
+//             onClick={handleCheckout}
+//             className="bg-yellow-400 hover:bg-yellow-500 w-full rounded-full py-2 mt-4 border border-yellow-600 font-medium"
+//           >
+//             Proceed to checkout
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Cart;
+
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useApp } from "../context/AppContext";
+import { useEffect } from "react";
 
 function Cart() {
-  const { API_BASE_URL, loading, setLoading } = useApp();
+  const {
+    API_BASE_URL,
+    loading,
+    setLoading,
+    cartItems,
+    addToCart,
+    decrement,
+    totalPrice,
+    fetchCart,
+    removeFromCartAPI,
+  } = useApp();
+
   const user = JSON.parse(sessionStorage.getItem("user"));
   const userId = user?.id;
 
-  const [cartItems, setCartItems] = useState([]);
-
-  // Fetch cart items
-  const fetchCart = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get(
-        `${API_BASE_URL}/carts?user_id=${userId}`
-      );
-      setCartItems(res.data.data || []);
-    } catch (error) {
-      toast.error("Failed to fetch cart");
-      console.log("Failed to fetch cart:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (userId) fetchCart();
+    if (userId) fetchCart(userId);
   }, [userId]);
 
-  // Update quantity
-  const updateQuantity = async (item, action) => {
-    const newQty =
-      action === "increase" ? item.quantity + 1 : item.quantity - 1;
-    if (newQty < 1) return;
-
-    try {
-      setLoading(true);
-      await axios.post(`${API_BASE_URL}/carts`, {
-        user_id: userId,
-        product_id: item.product_id,
-        has_variation: false,
-        quantity: newQty,
-      });
-      fetchCart();
-    } catch (error) {
-      toast.error("Failed to update quantity");
-      console.log("Failed to update quantity:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Delete item
-  const deleteItem = async (item) => {
-    try {
-      setLoading(true);
-      await axios.delete(`${API_BASE_URL}/carts`, {
-        data: {
-          user_id: userId,
-          product_id: item.product_id,
-        },
-      });
-      fetchCart();
-    } catch (error) {
-      console.log("Failed to delete cart item:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Checkout cart
   const handleCheckout = async () => {
     try {
       setLoading(true);
       await axios.post(`${API_BASE_URL}/carts/checkout`, { user_id: userId });
       toast.success("Checkout successful!");
-      setCartItems([]);
+      fetchCart(userId);
     } catch (error) {
-      toast.error("Checkout failed")
-      console.log("Checkout failed:", error);
+      toast.error("Checkout failed");
+      console.log(error);
     } finally {
       setLoading(false);
     }
   };
-
-  // subtotal
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -103,57 +188,51 @@ function Cart() {
           {loading ? (
             <p>Loading cart...</p>
           ) : cartItems.length === 0 ? (
-            <h1 className="">
-              Your cart is empty.
-            </h1>
+            <h1>Your cart is empty.</h1>
           ) : (
-            cartItems.map((item, index) => (
+            cartItems.map((item) => (
               <div
-                key={index}
+                key={item.id}
                 className="flex flex-col md:flex-row gap-4 py-4 border-b border-gray-200"
               >
                 <img
-                  src={item.product?.image || "/placeholder.png"}
-                  alt={item.product?.name || "Product"}
+                  src={item.images || "/placeholder.png"}
+                  alt={item.title}
                   className="w-32 h-32 object-contain mx-auto md:mx-0"
                 />
 
                 <div className="flex-1">
-                  <h3 className="text-lg font-medium">{item.product?.name}</h3>
-                  <p className="text-sm text-gray-600">
-                    {item.product?.description || "No description available."}
-                  </p>
-
+                  <h3 className="text-lg font-medium">{item.title}</h3>
+                  <p className="text-sm text-gray-600">{item.descp}</p>
                   <p className="text-sm mt-1 text-red-600">
                     Only {item.stock || 1} left in stock — order soon.
                   </p>
 
                   <div className="flex items-center gap-2 mt-3">
                     <button
-                      onClick={() => updateQuantity(item, "decrease")}
+                      onClick={() => decrement(item.id)}
                       className="px-2 py-1 border rounded"
                     >
                       -
                     </button>
                     <span>{item.quantity}</span>
                     <button
-                      onClick={() => updateQuantity(item, "increase")}
+                      onClick={() => addToCart(item.id)}
                       className="px-2 py-1 border rounded"
                     >
                       +
                     </button>
                     <button
-                      onClick={() => deleteItem(item)}
+                      onClick={() => removeFromCartAPI(userId, item.id)}
                       className="text-blue-500 ml-4"
                     >
                       Delete
                     </button>
-                    <button className="text-blue-500">Save for later</button>
                   </div>
                 </div>
 
                 <div className="text-right text-lg font-semibold">
-                  ₦{(item.price * item.quantity).toLocaleString()}
+                  ₦{item.price.toLocaleString()}
                 </div>
               </div>
             ))
@@ -161,9 +240,8 @@ function Cart() {
 
           {cartItems.length > 0 && (
             <div className="text-right mt-4 text-lg font-semibold">
-              Subtotal ({cartItems.length} item
-              {cartItems.length > 1 ? "s" : ""}):{" "}
-              <span className="text-xl">₦{subtotal.toLocaleString()}</span>
+              Subtotal ({cartItems.length} item{cartItems.length > 1 ? "s" : ""}
+              ): <span className="text-xl">₦{totalPrice.toLocaleString()}</span>
             </div>
           )}
         </div>
@@ -171,9 +249,10 @@ function Cart() {
         {/* RIGHT — CHECKOUT BOX */}
         <div className="w-full lg:w-1/3 bg-white p-4 rounded-md shadow-sm h-fit">
           <h3 className="text-lg font-medium">
-            Subtotal ({cartItems.length} item
-            {cartItems.length > 1 ? "s" : ""}):{" "}
-            <span className="font-semibold">₦{subtotal.toLocaleString()}</span>
+            Subtotal ({cartItems.length} item{cartItems.length > 1 ? "s" : ""}):{" "}
+            <span className="font-semibold">
+              ₦{totalPrice.toLocaleString()}
+            </span>
           </h3>
 
           <label className="flex items-center gap-2 mt-2 text-sm">
@@ -194,6 +273,3 @@ function Cart() {
 }
 
 export default Cart;
-
-
-

@@ -1,175 +1,163 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import axios from "axios"
-import { Link } from "react-router-dom"
-import ProductDetails from "./ProductDetails"
-import { Button, Modal, Input, Form, Table, Image } from "antd";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import ProductDetails from "../components/ProductDetails";
 
 const Shop = () => {
-    const { API_BASE_URL, loading, setLoading } = useApp();
-    const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
+  const { loading, setLoading, API_BASE_URL } = useApp();
+  const navigate = useNavigate(); 
 
-    useEffect(() => {
-        const merchantData = JSON.parse(sessionStorage.getItem("merchantUser"));
-        const getProducts = async () => {
-            try {
-                setLoading(true);
-                const res = await axios.get(
-                    `${API_BASE_URL}/products?merchant_id=${merchantData.id}`
-                );
-                setProducts(res?.data?.data || []);
-                console.log(res.data);
-            } catch (error) {
-                toast.error("Error fetching products");
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+  // Fetch products on mount
+  useEffect(() => {
+    const merchantData = JSON.parse(sessionStorage.getItem("merchantUser"));
+    if (!merchantData) {
+      toast.warning("Merchant not found. Please log in.");
+      navigate("/");
+      return;
+    }
 
-        getProducts();
-    }, []);
+    const getProduct = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(
+          `${API_BASE_URL}/products?merchant_id=${merchantData.id}`
+        );
+        setProducts(res?.data?.data || []);
+      } catch (error) {
+        toast.error("Error fetching products");
+        console.log("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    const columns = [
-        {
-            title: "Title",
-            dataIndex: "title",
-            key: "title",
-        },
-        {
-            title: "Image",
-            dataIndex: "image",
-            key: "image",
-            render: (image) =>
-                image ? (
-                    <Image
-                        src={Array.isArray(image) ? image[0] : image}
-                        alt="product"
-                        width={100}
-                        height={100}
-                        style={{ objectFit: "contain" }}
-                    />
-                ) : (
-                    "Image lost"
-                ),
-        },
-    ];
+    getProduct();
+  }, []);
 
+  if (loading) {
     return (
-        <>
-            <div>
-                <nav className="bg-gray-100 gap-2 pl-7 flex border-b border-gray-400 mb-2 h-8.5 items-center">
-                    <p className="font-bold text-sm cursor-pointer border-b border-transparent hover:border-blue-900 hover:text-blue-900 p-1.5">Today's Deals</p>
-                    <p className="color-gray-700 text-sm cursor-pointer border-b border-transparent hover:border-blue-900 hover:text-blue-900 p-1.5">Coupons</p>
-                    <p className="color-gray-700 text-sm cursor-pointer border-b border-transparent hover:border-blue-900 hover:text-blue-900 p-1.5">Renewed Deals</p>
-                    <p className="color-gray-700 text-sm cursor-pointer border-b border-transparent hover:border-blue-900 hover:text-blue-900 p-1.5">Outlet</p>
-                    <p className="color-gray-700 text-sm cursor-pointer border-b border-transparent hover:border-blue-900 hover:text-blue-900 p-1.5">Amazon Resale</p>
-                    <p className="color-gray-700 text-sm cursor-pointer border-b border-transparent hover:border-blue-900 hover:text-blue-900 p-1.5">Grocery Deals</p>
-                </nav>
-                <div className="flex flex-wrap gap-2 justify-center h-30 items-center">
-                        <Link to="/shop/cellphones&accessories">
-                    <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px]">Cellphones & Accessories</p>
-                    </Link>
-                        <Link to="/shop/appliances">
-                    <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px]">Appliances</p>
-                    </Link>
-                        <Link to="/shop/automotive">
-                    <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px]">Automotive</p>
-                    </Link>
-                </div>
-            </div>
-            <div className="min-h-screen flex">
-                <aside className="min-w-45 p-5 border-r ">
-                    <div>
-                        <h6 className="font-bold">Department</h6>
-                        
-                        <Link to="/shop">
-                        <input type="radio" checked />
-                        <span className="text-sm">All</span>
-                        </Link>
-                        <br />
-                        <Link to="/shop/cellphones_Accessories">
-                            <input type="radio" />
-                            <span className="text-sm">Cellphones & Accessories</span>
-                        </Link>
-                        <br />
-                        <Link to="/shop/appliances">
-                            <input type="radio" />
-                            <span className="text-sm">Appliances</span>
-                        </Link>
-                        <br />
-                        <Link to="/shop/automotive">
-                        <input type="radio"/>
-                        <span className="text-sm">Automotive</span>
-                        </Link>
-                        <br />
-                        <input type="radio" />
-                        <span className="text-sm">Baby Products</span>
-                        <p className="text-sm text-blue-500 cursor-pointer">See more</p>
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-gray-500">Loading product details...</p>
+      </div>
+    );
+  }
 
-                    </div>
-                    <div>
-                        <h6 className="font-bold">Brands</h6>
-                        <input type="checkbox" />
-                        <span className="text-sm">Bissell</span>
-                        <br />
-                        <input type="checkbox" />
-                        <span className="text-sm">Coop Home Goods</span>
-                        <br />
-                        <input type="checkbox" />
-                        <span className="text-sm">Amazon</span>
-                        <br />
-                        <input type="checkbox" />
-                        <span className="text-sm">ROVE</span>
+  return (
+    <>
+      {/* Top navigation */}
+      <div>
+        <nav className="bg-gray-100 gap-5 px-6 leading-8 flex border-b border-gray-400 mb-2 h-9 items-center ">
+          {[
+            "Today's Deals",
+            "Coupons",
+            "Renewed Deals",
+            "Outlet",
+            "Amazon Resale",
+            "Grocery Deals",
+          ].map((item, i) => (
+            <p
+              key={i}
+              className="text-gray-700 text-xs cursor-pointer border-b border-transparent hover:border-blue-900 hover:text-blue-900 pt-4"
+            >
+              {item}
+            </p>
+          ))}
+        </nav>
 
-                    </div>
-                </aside>
-                <div className="grid grid-cols-6">
-                    {/* <ProductDetails /> */}
-                    {
-                        products.length ?
-                            <div className="grid gap-5 mx-auto">
-                                {products.map((product) => {
-                                    <ProductDetails product_detail={product} key={product.id} />
-                                })}
-                            </div>
-                            :
-                            <div className="py-10 text-center w-full">
-                                <h3>No products found</h3>
-                            </div>
-                    }
+        <div className="flex flex-wrap gap-2 justify-center items-center">
+          <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px]">
+            Amazon Devices & Accessories
+          </p>
+          <p className="py-3 px-3 m-3 border border-gray-500 text-sm cursor-pointer rounded-[10px]">
+            Arts, Crafts & Sewing
+          </p>
+        </div>
+      </div>
 
-                {/* </div>
-                <div> */}
-                    <ProductDetails
-                        dataSource={products}
-                        columns={columns}
-                        rowKey="id"
-                        size="small"
-                    />
-                            <Form.Item
-                                label="Title"
-                                // name="title"
-                                rules={[{ required: true, message: "Please enter product title" }]}
-                            />
+      {/* Main section */}
+      <div className="min-h-screen flex">
+        {/* Sidebar */}
+        <aside className="min-w-45 p-5 border-r">
+          <div>
+            <h6 className="font-bold mb-2">Department</h6>
+            <label className="block text-sm">
+              <input type="radio" name="dept" className="mr-2" /> All
+            </label>
+            <label className="block text-sm">
+              <input type="radio" name="dept" className="mr-2" /> Amazon Devices
+              & Accessories
+            </label>
+            <label className="block text-sm">
+              <input type="radio" name="dept" className="mr-2" /> Arts, Crafts &
+              Sewing
+            </label>
+            <label className="block text-sm">
+              <input type="radio" name="dept" className="mr-2" /> Appliances
+            </label>
+            <label className="block text-sm">
+              <input type="radio" name="dept" className="mr-2" />
+              Automotive
+            </label>
+            <label className="block text-sm">
+              <input type="radio" name="dept" className="mr-2" /> Baby products
+            </label>
+            <p className="text-sm text-blue-500 cursor-pointer">See more</p>
+          </div>
+          <div>
+            <h6 className="font-bold">Brands</h6>
+            <input type="checkbox" />
+            <span className="text-sm">Bissell</span>
+            <br />
+            <input type="checkbox" />
+            <span className="text-sm">Coop Home Goods</span>
+            <br />
+            <input type="checkbox" />
+            <span className="text-sm">Amazon</span>
+            <br />
+            <input type="checkbox" />
+            <span className="text-sm">ROVE</span>
+          </div>
+        </aside>
 
-                            <Form.Item
-                                label="Image"
-                                // name="image"
-                                rules={[{ required: true, message: "Please enter Image URL" }]}
-                            />
-                </div>
-            </div>
+        {/* Product Grid */}
+        {products.length ? (
+          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4 mx-auto p-5">
+            {products.map((product) => (
+              <ProductDetails product_detail={product} key={product.id} />
+            ))}
+          </div>
+        ) : (
+          <div className="py-10 text-center w-full">
+            <h3>No products found</h3>
+          </div>
+        )}
+      </div>
 
-            <footer className="text-center border-y border-gray-300 pt-10 pb-5">
-                <h2 className="font-bold text-2xl m-1">See personalized recommendations</h2>
-                <Link to="/login">
-                    <button className="bg-yellow-400 px-15 py-1.5 text-sm hover:bg-yellow-500 cursor-pointer m-1 rounded-[50px]">Sign in</button>
-                </Link>
-                <p className="text-xs">New customer? <Link to="/register" className="text-blue-500 text-xs underline hover:text-blue-900">Start here</Link></p>
-            </footer>
-        </>
-    )
-}
+      {/* Footer */}
+      <footer className="text-center border-y border-gray-300 pt-10 pb-5">
+        <h2 className="font-bold text-2xl m-1">
+          See personalized recommendations
+        </h2>
+        <Link to="/login">
+          <button className="bg-yellow-400 px-6 py-1.5 text-sm hover:bg-yellow-500 cursor-pointer m-1 rounded-[50px]">
+            Sign in
+          </button>
+        </Link>
+        <p className="text-xs">
+          New customer?{" "}
+          <Link
+            to="/home/register"
+            className="text-blue-500 text-xs underline hover:text-blue-900"
+          >
+            Start here
+          </Link>
+        </p>
+      </footer>
+    </>
+  );
+};
+
 export default Shop;

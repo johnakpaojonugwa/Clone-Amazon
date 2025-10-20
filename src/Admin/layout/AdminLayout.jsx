@@ -88,7 +88,7 @@ function AdminLayout() {
                     className="mt-auto flex items-center gap-3 py-3 px-3 my-50 hover:bg-red-600 hover:text-white cursor-pointer transition-all"
                 >
 
-                    <PiSignInBold className="text-2xl text-red-500" />0
+                    <PiSignInBold className="text-2xl text-red-500" />
 
                     {sidebarOpen && <span>Sign out</span>}
                 </div>
