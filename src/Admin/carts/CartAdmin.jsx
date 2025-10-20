@@ -13,34 +13,29 @@ function CartAdmin() {
     decrement,
     totalPrice,
     fetchCart,
-    removeFromCart,
+    removeFromCartAPI,
   } = useApp();
-
-  const subtotal = totalPrice;
 
   const user = JSON.parse(sessionStorage.getItem("user"));
   const userId = user?.id;
 
-  // Fetch cart on load
   useEffect(() => {
     if (userId) fetchCart(userId);
   }, [userId]);
 
-  // Checkout function
   const handleCheckout = async () => {
     try {
       setLoading(true);
       await axios.post(`${API_BASE_URL}/carts/checkout`, { user_id: userId });
       toast.success("Checkout successful!");
-      await fetchCart(userId);
+      fetchCart(userId);
     } catch (error) {
-      console.log("Checkout failed:", error);
       toast.error("Checkout failed");
+      console.log(error);
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -55,43 +50,40 @@ function CartAdmin() {
           ) : cartItems.length === 0 ? (
             <h1>Your cart is empty.</h1>
           ) : (
-            cartItems.map((item, index) => (
+            cartItems.map((item) => (
               <div
-                key={index}
+                key={item.id}
                 className="flex flex-col md:flex-row gap-4 py-4 border-b border-gray-200"
               >
                 <img
-                  src={item.product?.image || "/placeholder.png"}
-                  alt={item.product?.name || "Product"}
+                  src={item.images || "/placeholder.png"}
+                  alt={item.title}
                   className="w-32 h-32 object-contain mx-auto md:mx-0"
                 />
 
                 <div className="flex-1">
-                  <h3 className="text-lg font-medium">{item.product?.name}</h3>
-                  <p className="text-sm text-gray-600">
-                    {item.product?.description || "No description available."}
-                  </p>
-
+                  <h3 className="text-lg font-medium">{item.title}</h3>
+                  <p className="text-sm text-gray-600">{item.descp}</p>
                   <p className="text-sm mt-1 text-red-600">
                     Only {item.stock || 1} left in stock — order soon.
                   </p>
 
                   <div className="flex items-center gap-2 mt-3">
                     <button
-                      onClick={() => decrement(item)}
+                      onClick={() => decrement(item.id)}
                       className="px-2 py-1 border rounded"
                     >
                       -
                     </button>
-                    <span>{item.qty}</span>
+                    <span>{item.quantity}</span>
                     <button
-                      onClick={() => addToCart (item)}
+                      onClick={() => addToCart(item.id)}
                       className="px-2 py-1 border rounded"
                     >
                       +
                     </button>
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => removeFromCartAPI(userId, item.id)}
                       className="text-blue-500 ml-4"
                     >
                       Delete
@@ -100,7 +92,7 @@ function CartAdmin() {
                 </div>
 
                 <div className="text-right text-lg font-semibold">
-                  ₦{(item.price * item.qty).toFixed(2)}
+                  ₦{item.price.toLocaleString()}
                 </div>
               </div>
             ))
@@ -108,9 +100,8 @@ function CartAdmin() {
 
           {cartItems.length > 0 && (
             <div className="text-right mt-4 text-lg font-semibold">
-              Subtotal ({cartItems.length} item
-              {cartItems.length > 1 ? "s" : ""}):{" "}
-              <span className="text-xl">₦{subtotal.toFixed(2)}</span>
+              Subtotal ({cartItems.length} item{cartItems.length > 1 ? "s" : ""}
+              ): <span className="text-xl">₦{totalPrice.toLocaleString()}</span>
             </div>
           )}
         </div>
@@ -118,9 +109,10 @@ function CartAdmin() {
         {/* RIGHT — CHECKOUT BOX */}
         <div className="w-full lg:w-1/3 bg-white p-4 rounded-md shadow-sm h-fit">
           <h3 className="text-lg font-medium">
-            Subtotal ({cartItems.length} item
-            {cartItems.length > 1 ? "s" : ""}):{" "}
-            <span className="font-semibold">₦{subtotal.toFixed(2)}</span>
+            Subtotal ({cartItems.length} item{cartItems.length > 1 ? "s" : ""}):{" "}
+            <span className="font-semibold">
+              ₦{totalPrice.toLocaleString()}
+            </span>
           </h3>
 
           <label className="flex items-center gap-2 mt-2 text-sm">

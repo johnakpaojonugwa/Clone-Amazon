@@ -55,29 +55,42 @@ function Dashboard() {
     };
 
     const fetchTotalCartProducts = async () => {
-      const user_id = userData?.id;
-      if (!user_id) {
-        // console.log("No user logged in");
-        setTotalCartProducts(0);
-        return;
-      }
+  const userId = userData?.id;
+  if (!userId) {
+    setTotalCartProducts(0);
+    return;
+  }
 
-      try {
-        setLoading(true);
-        const res = await axios.get(`${ API_BASE_URL }/carts?user_id=${ user_id }`);
-        const cartItems = res.data.data || res.data || [];
-        const totalQuantity = cartItems.reduce(
-          (sum, item) => sum + (item.quantity || 0),
-          0
-        );
-        setTotalCartProducts(totalQuantity);
-      } catch (err) {
-        console.log("Error fetching cart count:", err);
-        setTotalCartProducts(0);
-      } finally {
-        setLoading(false);
-      }
-    };
+  try {
+    setLoading(true);
+    const res = await axios.get(`${API_BASE_URL}/carts?user_id=${userId}`);
+    
+    // Normalize response
+    let cartItems = [];
+    if (Array.isArray(res.data)) {
+      cartItems = res.data;
+    } else if (res.data?.data && Array.isArray(res.data.data)) {
+      cartItems = res.data.data;
+    } else {
+      cartItems = [];
+    }
+
+    // Sum quantities safely
+    const totalQuantity = cartItems.reduce((sum, item) => {
+      // item.quantity might be nested or missing, default to 1
+      const qty = item.quantity ?? (item.products?.reduce((a, p) => a + (p.quantity ?? 1), 0) ?? 0);
+      return sum + qty;
+    }, 0);
+
+    setTotalCartProducts(totalQuantity);
+  } catch (err) {
+    console.log("Error fetching cart count:", err);
+    setTotalCartProducts(0);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
     const fetchProducts = async () => {
       try {

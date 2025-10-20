@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
-import { FaSearch, FaShoppingCart } from "react-icons/fa";
+import { FaSearch, FaOpencart  } from "react-icons/fa";
+import { useApp } from "../context/AppContext";
 
 function Nav() {
   const user = JSON.parse(sessionStorage.getItem("user"))
+  const { cartItems } = useApp();
 
   return (
     <nav className="bg-[#131921] text-white p-2 text-sm">
@@ -43,9 +45,13 @@ function Nav() {
             Returns<br />
             <strong>& Orders</strong>
           </span>
-          <Link to="/home/cart" className="flex items-center gap-1  text-2xl">
-            <FaShoppingCart />
-            Cart
+          <Link to="/home/cart" className="flex items-center gap-1  text-xs">
+            <div className="relative">
+          <FaOpencart size={30} />
+          <div className="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full flex justify-center items-center text-xs">
+            {cartItems.length}
+          </div>
+        </div>
           </Link>
         </div>
       </div>
