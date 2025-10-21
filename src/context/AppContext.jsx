@@ -11,7 +11,7 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState([]);
 
-  // Load saved theme + user + cart
+  // Load saved theme + merchant + cart
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     const merchantUser = sessionStorage.getItem('merchantUser');
@@ -68,7 +68,7 @@ const fetchCart = async (userId) => {
               price: Number(productItem.amount.replace(/,/g, "")) || 0, // use cart API amount
             };
           } catch (err) {
-            console.error("Failed to fetch product:", productItem.id, err);
+            console.log("Failed to fetch product:", productItem.id, err);
             return {
               id: productItem.id,
               title: "Unknown Product",
@@ -85,7 +85,7 @@ const fetchCart = async (userId) => {
 
     setCartItems(normalizedCart.flat());
   } catch (error) {
-    console.error("Failed to fetch cart:", error);
+    console.log("Failed to fetch cart:", error);
     setCartItems([]);
   } finally {
     setLoading(false);
@@ -150,11 +150,11 @@ const addToCart = (product) => {
         toast.success("Item added to cart!");
         return res.data;
       } else {
-        console.error("Unexpected response:", res);
+        console.log("Unexpected response:", res);
         toast.error("Failed to add to cart");
       }
     } catch (error) {
-      console.error("Add to cart API error:", error);
+      console.log("Add to cart API error:", error);
       toast.error(
         error.response?.data?.message ||
           "Server error: failed to add item to cart"
@@ -185,7 +185,7 @@ const addToCart = (product) => {
     setCartItems(prev => prev.filter(item => item.id !== productId));
     toast.success("Item removed from cart");
   } catch (error) {
-    console.error("Failed to remove from cart:", error);
+    console.log("Failed to remove from cart:", error);
     toast.error("Failed to remove item from cart");
   } finally {
     setLoading(false);
