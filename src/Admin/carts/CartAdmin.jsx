@@ -2,6 +2,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useApp } from "../../context/AppContext";
 import { useEffect } from "react";
+import { FaTimes } from "react-icons/fa";
+
 
 function CartAdmin() {
   const {
@@ -62,31 +64,28 @@ function CartAdmin() {
                 />
 
                 <div className="flex-1">
-                  <h3 className="text-lg font-medium">{item.title}</h3>
-                  <p className="text-sm text-gray-600">{item.descp}</p>
-                  <p className="text-sm mt-1 text-red-600">
-                    Only {item.stock || 1} left in stock — order soon.
-                  </p>
+                  <h3 className="text-lg font-medium">{item.title.slice(0, 50)}...</h3>
+                  <p className="text-sm text-gray-600">{item.descp.slice(0, 150)}...</p>
 
                   <div className="flex items-center gap-2 mt-3">
                     <button
                       onClick={() => decrement(item.id)}
-                      className="px-2 py-1 border rounded"
+                      className="px-2 py-1 border rounded cursor-pointer"
                     >
                       -
                     </button>
                     <span>{item.quantity}</span>
                     <button
                       onClick={() => addToCart(item.id)}
-                      className="px-2 py-1 border rounded"
+                      className="px-2 py-1 border rounded cursor-pointer"
                     >
                       +
                     </button>
                     <button
                       onClick={() => removeFromCartAPI(userId, item.id)}
-                      className="text-blue-500 ml-4"
+                      className="text-red-500 ml-4 cursor-pointer"
                     >
-                      Delete
+                      <FaTimes size={40} />
                     </button>
                   </div>
                 </div>

@@ -11,6 +11,7 @@ const Product = () => {
 
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const merchantData = JSON.parse(sessionStorage.getItem("merchantUser"));
@@ -46,7 +47,11 @@ const Product = () => {
 
     try {
       setLoading(true);
-      await addToCartAPI(user.id, { ...product, quantity, has_variation: false });
+      await addToCartAPI(user.id, {
+        ...product,
+        quantity,
+        has_variation: false,
+      });
       toast.success("Added to cart!");
     } catch (err) {
       toast.error("Failed to add to cart");
@@ -75,18 +80,35 @@ const Product = () => {
   return (
     <>
       <div className="flex justify-center">
-        {/* LEFT IMAGE */}
-        <aside className="w-[35%] m-5 mt-20">
-          <img
-            src={product.images}
-            alt={product.title}
-            className="object-contain w-[90%] h-[400px]"
-          />
+        {/* LEFT IMAGE WITH THUMBNAILS */}
+        <aside className="w-[35%] m-5 mt-10 flex gap-4">
+          {/* Thumbnail list */}
+          <div className="flex flex-col gap-3">
+            {product.images?.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Thumbnail ${index + 1}`}
+                onClick={() => setSelectedImage(img)}
+                className={`w-16 h-16 object-cover rounded-md border cursor-pointer hover:border-blue-500 transition 
+          ${selectedImage === img ? "border-blue-500" : "border-gray-300"}`}
+              />
+            ))}
+          </div>
+
+          {/* Main image display */}
+          <div className="flex-1 ">
+            <img
+              src={selectedImage || product.images?.[0]}
+              alt={product.title}
+              className="object-contain w-[90%] h-[600px] rounded-md border border-gray-200"
+            />
+          </div>
         </aside>
 
         {/* MIDDLE DETAILS */}
         <div className="w-[31%] m-5">
-          <p className="text-2xl font-[500]">{product.descp}</p>
+          <p className="text-2xl font-[500]">{product.title}</p>
           <br />
           <span>4.4</span>
           <span className="text-blue-800 text-sm hover:text-900 hover:underline cursor-pointer ml-5">
@@ -186,13 +208,15 @@ const Product = () => {
                 Details
               </span>
             </p>
-            <p className="px-5 my-1 text-sm">Sales taxes may apply at checkout</p>
+            <p className="px-5 my-1 text-sm">
+              Sales taxes may apply at checkout
+            </p>
             <p className="my-1 text-sm">
               Delivery <strong>Thursday, November 6</strong>
             </p>
             <p className="my-1 text-sm">
-              Or fastest delivery <strong>Friday, October 24</strong>. Order within{" "}
-              <span className="text-green-500">18 hrs 18 mins</span>
+              Or fastest delivery <strong>Friday, October 24</strong>. Order
+              within <span className="text-green-500">18 hrs 18 mins</span>
             </p>
             <p className="text-gray-700 my-1 text-xs">
               <span className="text-blue-600 cursor-pointer hover:text-blue-900">
