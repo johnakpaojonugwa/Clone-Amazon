@@ -3,37 +3,53 @@ import { Link } from "react-router-dom";
 function ProductDetails({ product_detail }) {
   if (!product_detail) return null;
 
-  const { id, title, image, description, price } = product_detail;
+  const { id, title, image, descp, price } = product_detail;
 
   return (
-    <div className="bg-white shadow-md hover:shadow-lg overflow-hidden w-[200px] transition-all duration-200">
-      <Link to={`/home/product/${id}`}>
-        <div className="w-full h-[150px] flex items-center justify-center bg-gray-50">
+    <div className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 hover:border-gray-300">
+      <Link to={`/home/product/${id}`} className="block">
+        {/* 🔹 Product Image */}
+        <div className="relative w-full bg-gray-50 aspect-[4/3] flex items-center justify-center overflow-hidden rounded-t-xl">
           <img
             src={image || "https://via.placeholder.com/250"}
             alt={title || "Product"}
-            className="object-contain h-full w-full"
+            className="object-contain w-3/4 h-3/4 group-hover:scale-105 transition-transform duration-300"
           />
+
+          {/* 🔸 Small hover overlay effect */}
+          <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
 
-        <div className="p-3 flex flex-col justify-between h-[180px]">
-          <h3 className="text-[15px] font-semibold text-gray-800 line-clamp-2">
+        {/* 🔹 Product Info */}
+        <div className="p-4 flex flex-col gap-2">
+          <h3 className="text-[15px] md:text-[16px] font-medium text-gray-900 line-clamp-2 group-hover:text-[#007185] transition-colors">
             {title || "Unnamed Product"}
           </h3>
 
-          <p className="text-gray-500 text-sm line-clamp-3 mt-1">
-            {description || "No description available."}
+          <p className="text-gray-600 text-sm line-clamp-2 leading-snug">
+            {descp || "No description available."}
           </p>
 
-          <h4 className="text-lg font-bold text-gray-900 mt-2">
-            ₦{price || "0.00"}
-          </h4>
-
-          <div className="mt-3">
-            <button className="bg-yellow-400 hover:bg-yellow-500 text-sm font-medium rounded-full px-4 py-1.5 w-full">
-              View Details
-            </button>
+          <div className="flex items-baseline justify-between mt-1">
+            <h4 className="text-lg md:text-xl font-semibold text-gray-900">
+              ₦{price || "0.00"}
+            </h4>
+            <span className="text-xs text-green-600 font-semibold">
+              In stock
+            </span>
           </div>
+
+          {/* 🔹 Button */}
+          <button
+            className="
+              mt-3 bg-yellow-400 hover:bg-yellow-500 
+              text-sm md:text-[15px] font-semibold 
+              rounded-full py-2 transition-all duration-200
+              shadow-sm hover:shadow
+            "
+          >
+            View Details
+          </button>
         </div>
       </Link>
     </div>
