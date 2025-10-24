@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { LiaSpinnerSolid } from "react-icons/lia";
+
 
 const Product = () => {
   const { id } = useParams();
@@ -61,10 +63,10 @@ const Product = () => {
     }
   };
 
-  if (loading) {
+ if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <p className="text-gray-500">Loading product details...</p>
+      <div className="flex justify-center items-center py-20">
+        <LiaSpinnerSolid size={40} className="animate-spin text-blue-500" />
       </div>
     );
   }

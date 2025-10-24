@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useApp } from "../context/AppContext";
 import { useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
-
+import { LiaSpinnerSolid } from "react-icons/lia";
 
 function Cart() {
   const {
@@ -48,7 +48,12 @@ function Cart() {
           <hr className="mb-4" />
 
           {loading ? (
-            <p>Loading cart...</p>
+            <div className="flex justify-center items-center py-20">
+              <LiaSpinnerSolid
+                size={40}
+                className="animate-spin text-blue-500"
+              />
+            </div>
           ) : cartItems.length === 0 ? (
             <h1>Your cart is empty.</h1>
           ) : (
@@ -64,11 +69,16 @@ function Cart() {
                 />
 
                 <div className="flex-1">
-                  <h3 className="text-lg font-medium">{item.title.slice(0, 50)}...</h3>
-                  <p className="text-sm text-gray-600">{item.descp.slice(0, 150)}...</p>
+                  <h3 className="text-lg font-medium">
+                    {item.title.slice(0, 50)}...
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {item.descp.slice(0, 150)}...
+                  </p>
 
-                  <div className="flex items-center gap-2 mt-3">
-                    <button
+                  <div className="flex justify-between items-center gap-2 mt-3">
+                   <div className="flex items-center gap-2 mt-3">
+                     <button
                       onClick={() => decrement(item.id)}
                       className="px-2 py-1 border rounded cursor-pointer"
                     >
@@ -81,11 +91,12 @@ function Cart() {
                     >
                       +
                     </button>
+                   </div>
                     <button
                       onClick={() => removeFromCartAPI(userId, item.id)}
                       className="text-red-500 ml-4 cursor-pointer"
                     >
-                      <FaTimes size={40} />
+                      <FaTimes size={24} />
                     </button>
                   </div>
                 </div>

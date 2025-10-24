@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { toast } from "react-toastify";
 import ProductDetails from "../components/ProductDetails";
+import { LiaSpinnerSolid } from "react-icons/lia";
 
 const Shop = () => {
   const [products, setProducts] = useState([]);
@@ -39,8 +40,8 @@ const Shop = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center">
-        <p className="text-gray-500">Loading product details...</p>
+      <div className="flex justify-center items-center py-20">
+        <LiaSpinnerSolid size={40} className="animate-spin text-blue-500" />
       </div>
     );
   }
