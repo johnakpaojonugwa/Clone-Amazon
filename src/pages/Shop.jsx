@@ -17,7 +17,7 @@ const Shop = () => {
   const slide = (direction) => {
     const container = sliderRef.current;
     const itemWidth = container.firstChild?.offsetWidth || 250;
-    const scrollDistance = itemWidth * 3; // move 3 cards per click
+    const scrollDistance = itemWidth * 3; 
     container.scrollBy({
       left: direction === "left" ? -scrollDistance : scrollDistance,
       behavior: "smooth",
@@ -98,7 +98,7 @@ const Shop = () => {
         ))}
       </nav>
       {/* 🔹 Category slider */}
-      <div className="w-[90%] md:w-[80%] mx-auto flex items-center justify-between gap-2 p-2 relative">
+      <div className="w-[90%] md:w-[80%] mx-auto flex items-center justify-between gap-2 p-2 relative overflow-hidden">
         {/* Left Button */}
         <button
           onClick={() => slide("left")}
